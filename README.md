@@ -40,3 +40,5 @@ EVEREADING은 누구나 자유롭게 소설을 연재할 수 있는 사이트를
 |공지사항(유저)|공지사항(관리자)|자주 묻는 질문(유저)|자주 묻는 질문(관리자)|
 |[![Video Label](http://img.youtube.com/vi/Eb769kDtcuU/0.jpg)](https://youtu.be/Eb769kDtcuU)|[![Video Label](http://img.youtube.com/vi/kXyofD3h3a8/0.jpg)](https://youtu.be/kXyofD3h3a8)|[![Video Label](http://img.youtube.com/vi/188X5geP0K8/0.jpg)](https://youtu.be/188X5geP0K8)|[![Video Label](http://img.youtube.com/vi/1o1Wszz4t_U/0.jpg)](https://youtu.be/1o1Wszz4t_U)|
 |1:1 문의(유저)|1:1 문의(관리자)|캐러셀 등록(관리자)|케러셀 수정(관리자)|
+|[![Video Label](http://img.youtube.com/vi/4nV-1DLZd-s/0.jpg)](https://youtu.be/4nV-1DLZd-s)|[![Video Label](http://img.youtube.com/vi/eCU6nJ2oMu8/0.jpg)](https://youtu.be/eCU6nJ2oMu8)|[![Video Label](http://img.youtube.com/vi/bWomwJorduc/0.jpg)](https://youtu.be/bWomwJorduc)||
+|메인 TOP 10 + 베스트|장르|소설 등록(유저)||
