@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/member/personalInfo.css}">
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        <div class="container w-75">
+            <div class="row mx-5 px-5 py-5">
+                <div class="col-3 menu">
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <p>[[${info.nickname}]]님은</p><br>
+                        <p sec:authorize="hasRole('ADMIN')"class="fw-bold">관리자 회원</p>
+                        <p>입니다</p>
+                    </div>
+                </div>
+                <div class="col-9 pt-5 px-5 d-flex info">
+                    <h4 class="w-100 pb-2">회원탈퇴</h4>
+                </div>
+
+                <div class="col-3 pt-4 menu">
+                    <p><i class="fa fa-user-o text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/infoView">
+                            회원정보수정
+                        </a>
+                    </p>
+                    <p><i class="fa fa-lock text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/pwModify">
+                            비밀번호 변경
+                        </a>
+                    </p>
+                    <p class="on"><i class="fa fa-sign-out text-center pt-2 ps-1" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/signout">
+                            회원탈퇴
+                        </a>
+                    </p>
+                </div>
+                <div class="col-9 px-5 py-4 info" id="signout">
+                    <div id="outinfo">
+                        <p>탈퇴시 주의사항</p>
+                        <ul class="text-muted">
+                            <li class="mb-2">
+                                <span class="text-danger">즉시 탈퇴 처리 및 기존 아이디 사용 불가</span><br>
+                                회원 탈퇴 시, 즉시 탈퇴 처리되며 기존에 가입하셨던 아이디로 재가입(재사용)이 불가능합니다.
+                            </li>
+                            <li class="mb-2">
+                                <span class="text-danger">적립금/혜택 소멸 및 재가입시 복구 불가</span><br>
+                                회원 탈퇴 시, 회원님 아이디에 등록된 적립금과 혜택은 모두 소멸되어, 재가입하더라도 복구되지 않습니다.
+                            </li>
+                            <li class="mb-2">
+                                <span class="text-danger">관계법령에 따른 주문번호는 회원 탈퇴 후 5년간 보존</span><br>
+                                전자상거래 등에서의 소비자 보호에 관한 법률 제6조(거래기록의 보존 등)에 의거, 주문정보는 회원 탈퇴 후 5년간 보존됩니다.
+                            </li>
+                            <li class="mb-2">
+                                <span class="text-danger">게시글 수정/삭제 불가</span><br>
+                                상품리뷰와 1:1 문의와 같은 게시판형 서비스에 등록된 게시물은 탈퇴 후에도 자동 삭제 되지 않습니다. 탈퇴 후에는 회원정보 삭제로 인해 작성자 본인 여부를 확인할 수 없으므로, 게시글 편집 및 삭제 처리가 원천적으로 불가능합니다. 삭제를 원하는 게시글이 있을 경우, 먼저 해당 게시글을 삭제 하신 후, 탈퇴를 신청하시기 바랍니다.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-4" id="outcheck">
+                        <div  class="d-flex justify-content-center">
+                            <input type="checkbox" id="checkbox">
+                            <label class="m-2">상기 사항을 모두 확인하였습니다.</label>
+                        </div>
+                        <p>적립금/혜택 소멸 및 재가입시 복구 불가, 이용 종료 및 복구 불가,
+                        <span class="fw-bold text-danger">기존 아이디 5년간 재사용 불가 에 대해 동의 합니다.</span></p>
+                    </div>
+                    <form action="/member/signout" method="post" class="d-flex justify-content-center mt-5">
+                        <input type="hidden" name="email" th:value="${info.email}">
+                        <button type="button" class="btn btn-outline-danger p-1 me-2 w-50" onclick="location.href='/home'">취소</button>
+                        <button type="submit" id="ok" class="btn btn-danger bg-danger text-white rounded p-1 w-50">동의</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+
+            document.getElementById("ok").onclick = function () {
+                const is_checked = document.getElementById('checkbox').checked;
+
+                if(is_checked==false){
+                    alert("회원 탈퇴 안내사항 확인을 선택해주세요.");
+                    return false;
+                }
+                if (!confirm("모든 정보가 삭제되며,\n애브리딩 로그인 및 이용이 불가능 합니다.\n정말로 탈퇴하시겠습니까?")) {
+                    return false;
+                }
+
+            };
+        </script>
+    </th:block>
+ 
+</th:block>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/episode/episode.css}">
+    <div class="container">
+        <style>
+        .form-control{
+            margin: 10px;
+        }
+        .textLength, .titleLength, .noteLength{
+            color: lightgray;
+            float: right;
+        }
+        </style>
+        <h2>소설 수정</h2>
+        <form method="post">
+            <input type="hidden" name="nno" th:value="${dto.nno}">
+            <div class="form-group">
+                <label>제목</label><span class="titleLength"></span>
+                <input type="text" name="title" th:value="${dto.title}" class="form-control title" maxlength="50">
+            </div>
+    
+            <div class="form-group">
+                <label>내용</label><span class="textLength"></span>
+                <textarea name="content" rows="20" class="form-control content" th:text="${dto.content}" maxlength="20000"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>작가의 말</label><span class="noteLength"></span>
+                <textarea name="note" rows="3" class="form-control note" maxlength="200">[[${dto.note}]]</textarea>
+            </div>
+            <div class="btns">
+                <button class="btn btn-outline-default">수정</button>
+                <a class="btn btn-outline-default" th:href="@{/episode/list(nno=${dto.nno})}">취소</a>
+            </div>
+            
+        </form>
+        
+    </div>
+
+<script>
+    //현재 글자수 먼저 출력
+    $(document).ready(function(){
+        const titleLength = document.querySelector('.title').value.length;
+        console.log(titleLength);
+        document.querySelector('.titleLength').textContent = titleLength + '/50';
+
+        const contentLength = document.querySelector('.content').value.length;
+        console.log(contentLength);
+        document.querySelector('.textLength').textContent = contentLength + '/20000';
+
+        const noteLength = document.querySelector('.note').value.length;
+        console.log(noteLength);
+        document.querySelector('.noteLength').textContent = noteLength + '/50';
+    });
+
+    //수정 시 글자수
+    $('.content').on('input',function(){
+    var length = $(this).val();
+    $('.textLength').text(length.length+'/20,000');
+    });
+    $('.title').on('input',function(){
+        var length = $(this).val();
+        $('.titleLength').text(length.length+'/50');
+    });
+    $('.note').on('input',function(){
+        var length = $(this).val();
+        $('.noteLength').text(length.length+'/200');
+    });
+
+</script>
+
+</th:block> 
+</th:block>
+</html>

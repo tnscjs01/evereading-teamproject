@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/free/free.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/free/register.css}">
+    <script type="text/javascript" th:src="@{/js/free/free.js}"></script>
+
+    <div class="boardKategorie">
+        <div id="free" class="bk" OnClick="location.href ='/free/list'" style="cursor:pointer;">
+            <a href="/free/list">자유</a>
+        </div>
+        <div id="review" class="bk" OnClick="location.href ='/review/list'">
+            <a href="/review/list" style="color: black;">리뷰</a>
+        </div>
+    </div>
+    <div class="topWrite">
+        글쓰기
+    </div>
+    <form class="writeForm" th:action="@{/free/register}" th:method="post">
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" id="title" class="form-control" name="title" maxlength='50' placeholder="제목을 입력해주세요.">
+            <span id="titleLengthCheck">0자/50자</span>
+        </div>
+        <div class="form-group">
+            <label>내용</label>
+            <textarea rows="15" id="content" name="content" class="form-control" maxlength='5000' placeholder="내용을 입력해주세요."></textarea>
+            <span id="textLengthCheck">0자/5000자</span>
+        </div>
+        <div class="form-group">
+            <input type="hidden" class="form-control" name="email" th:value="${email}" readonly>
+        </div>
+        <div class="opsionbtn">
+            <button type="submit" class="btn btn-secondary btn-sm submitBtn">글쓰기</button>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function(e){
+            $('.submitBtn').click(function(){
+                // 제목 0이면 작성 못함
+                let inputTitle = $('input[name="title"]');
+                let length = inputTitle.val().length;
+                if(length==0){
+                    alert("제목을 입력하세요.");
+                    return false;
+                }
+                // 내용 0이면 작성 못함
+                let inputContent = $('textarea[name="content"]');
+                let lengths = inputContent.val().length;
+                if(lengths==0){
+                    alert("내용을 입력하세요.");
+                    return false;
+                }
+            });
+            // textarea 글자수 카운팅
+            $("#content").keyup(function(e){
+                let content = $(this).val();
+                $("#textLengthCheck").text("(" + content.length + "자" + " / 5000자)");
+                if (content.length > 5000) {
+                        alert("최대 5000자까지 입력 가능합니다.");
+                        $(this).val(content.substring(0, 5000));
+                        $('#textLengthCheck').text("(5000자/5000자)");
+                }
+            });
+            $("#title").keyup(function(e){
+                let title = $(this).val();
+                $("#titleLengthCheck").text("(" + title.length + "자" + " / 50자)");
+                if (title.length > 50) {
+                        alert("최대 50자까지 입력 가능합니다.");
+                        $(this).val(title.substring(0, 50));
+                        $('#titleLengthCheck').text("(50자/50자)");
+                }
+            });
+            // textarea 자동 높이 변환
+            $('textarea').on( 'keyup', function (e){
+                $(this).css('height', 'auto');
+                $(this).height(this.scrollHeight);
+            });
+            $('textarea').keyup();
+        });
+    </script>
+    </th:block>
+</th:block>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/event/event.css">
+
+    <div class="container">
+
+        <h3 class="m-3">이벤트</h3>
+
+        <div id="titleBox" class="pt-3 pb-3">
+            <h4 id="title">[[${eventDto.title}]]</h4>
+            <span id="regdate">[[${#temporals.format(eventDto.regdate, 'yyyy-MM-dd hh:mm:ss')}]]</span>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <img th:src="@{/eventImg/{eventImg}(eventImg=${eventDto.eventImg})}" alt="">
+            </div>            
+            <p>[[${eventDto.content}]]</p>
+        </div>        
+    
+    </div>
+
+    <div class="d-grid gap-2 d-flex justify-content-center mt-3 row" id="btnBox">
+
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <a th:href="@{/event/modify(evno = ${eventDto.evno}, page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-outline-primary btn-lg">수정</button>
+            </a>
+        </div>
+        
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <form id="deleteForm" action="/event/delete" method="post">
+                <input type="hidden" name="evno" th:value="${eventDto.evno}">
+                <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                <button type="button" class="btn btn-outline-danger btn-lg" onclick="confirmDelete()">삭제</button>
+            </form>
+        </div>
+
+        <div class="col-2"  th:if="${#request.isUserInRole('ADMIN')}">
+            <a th:href="@{/event/list(page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-lg listBtn">목록</button>
+            </a>
+        </div>
+
+        <div class="col-2">
+            <a th:href="@{/home}">
+                <button type="button" class="btn btn-lg listBtn">홈으로</button>
+            </a>
+        </div>
+        
+    </div>
+
+    <script>
+
+        function confirmDelete() {
+
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                document.getElementById("deleteForm").submit();
+            }
+
+        }
+        
+    </script>        
+
+    </th:block>
+
+</th:block>

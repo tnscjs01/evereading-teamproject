@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/event/event.css">
+ 
+        <div class="container">
+
+            <h3 class="m-3">이벤트</h3>
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr class="table table-light">
+                        <th scope="col" class="text-center col-1">번호</th>
+                        <th scope="col" class="text-center col-8">제목</th>                
+                        <th scope="col" class="text-center col-3">등록일</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="eventDto : ${result.dtoList}" >
+                        <th scope="row" class="text-center">
+                            [[${eventDto.evno}]]
+                        </th>
+
+                        <td>
+                            <a th:href="@{/event/read(evno = ${eventDto.evno}, page= ${result.page})}" id="listTitle">
+                                [[${eventDto.title}]]
+                            </a>
+                        </td>
+
+                        <td class="text-center" th:text="${#temporals.format(eventDto.regdate, 'yyyy/MM/dd')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                <a th:href="@{/event/register}" th:if="${#request.isUserInRole('ADMIN')}">
+                    <button type="button" class="btn btn-outline-primary">이벤트 등록</button>
+                </a>
+            </div>
+
+            <ul class="pagination justify-content-center">
+                
+                <li class="page-item " th:if="${result.prev}">
+                    <a class="page-link" th:href="@{/event/list(page= ${result.start -1})}" tabindex="-1">Prev</a>
+                </li>
+
+                <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{/event/list(page = ${page})}">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{/event/list(page= ${result.end + 1})}">Next</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <script th:inline="javascript">
+
+            $(document).ready(function () {
+
+                var msgType = [[${msgType}]];
+                var msg = [[${msg}]];
+
+                if (msgType === 'write') {
+
+                    if (confirm('이벤트가 등록되었습니다.')) {
+                        window.location.href = '/event/list';
+                    } else {
+                        window.location.href = '/event/list';
+                    }
+
+                } else if (msgType === 'delete') {
+
+                    if (confirm('이벤트가 삭제되었습니다.')) {
+                        window.location.href = '/event/list';
+                    } else {
+                        window.location.href = '/event/list';
+                    }
+
+                }
+                
+            });
+
+        </script> 
+
+    </th:block>
+
+</th:block>

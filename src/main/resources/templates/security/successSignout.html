@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/security/successSignout.css}">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        <div class="container text-center">
+            <div class="mt-5 pt-5">
+                <div class=" d-flex justify-content-center">
+                    <div class="rounded-circle" id="check">
+                        <i class="fa fa-check fa-5x pt-2" aria-hidden="true"></i>
+                    </div>
+                </div>
+                
+                <h4 class="m-3 fw-bold">
+                    회원탈퇴가 <span class="text-primary">완료되었습니다.</span>
+                </h4>
+                <p class="fw-bold no-margin">그동안 애브리딩 서비스를 이용해 주셔서 감사합니다.</p>
+                <p class="text-secondary">보다 나은 서비스로 다시 찾아 뵙겠습니다.</p>
+                <button class="btn btn-outline-default w-25 m-3" onclick="location.href='/home'">홈으로</button>
+            </div>
+        </div>
+        
+
+    </th:block>
+
+</th:block>

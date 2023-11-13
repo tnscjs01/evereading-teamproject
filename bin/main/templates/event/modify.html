@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/event/event.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+        <h1 class="m-3 text-center">이벤트 내용 수정</h1>
+
+        <form action="/event/modify" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+
+            <div class="form-group m-3">
+                <label>번호</label>
+                <input type="text" class="form-control" name="evno" th:value="${eventDto.evno}" readonly>
+            </div>
+
+            <div class="form-group m-3">
+                <label>제목</label>
+                <input type="text" class="form-control" name="title" th:value="${eventDto.title}" required>
+            </div>
+
+            <div class="form-group m-3">
+                <label>내용</label>
+                <textarea class="form-control" rows="5" name="content" required>[[${eventDto.content}]]</textarea>
+            </div>
+
+            <div class="form-group m-3">
+                <label>캐러셀 업로드</label><br>                
+                <input type="file" class="form-control-file" id="carouselImageInput" name="carouselImageFile" accept="image/*" onchange="previewCarouselImage()">
+            </div>     
+
+            <div class="container" id="uploadImgBox">
+                <div class="row justify-content-center">
+
+                    <div class="col-4 text-center p-4 m-2">
+
+                        <div>
+                            <h5 class="mb-3">기존 캐러셀 이미지</h5>
+                        </div>
+
+                        <div class="image-container">
+                            <img class="img-fluid" th:src="@{/carouselImg/{carouselImg}(carouselImg=${eventDto.carouselImg})}" alt="carouselImg" style="max-width: 300px; max-height: 200px;">                                                    
+                        </div>
+
+                    </div>
+
+                    <div class="col-4 text-center p-4 m-2">
+
+                        <div>
+                            <h5 class="mb-3">업로드한 캐러셀 이미지</h5>
+                        </div>
+
+                        <div class="image-container">
+                            <img class="img-fluid" id="carouselImagePreview" src="#" alt="Carousel Image Preview" style="display: none; max-width: 300px; max-height: 200px;">
+                            <button id="deleteCarouselButton" class="delete-button" style="display: none" onclick="deleteImage('carouselImagePreview')">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>                            
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="form-group m-3">
+                <label>이벤트 이미지 업로드</label><br>
+                <input type="file" class="form-control-file" id="eventImageInput" name="eventImageFile" onchange="previewEventImage()">
+            </div>
+            
+            <div class="container" id="uploadImgBox">
+                <div class="row justify-content-center">
+
+                    <div class="col-4 text-center p-4 m-2">
+
+                        <div>
+                            <h5 class="mb-3">기존 이벤트 이미지</h5>
+                        </div>
+
+                        <div class="image-container">                                                   
+                            <img class="img-fluid" th:src="@{/eventImg/{eventImg}(eventImg=${eventDto.eventImg})}" alt="eventImg" style="max-width: 300px; max-height: 200px;">
+                        </div>
+
+                    </div>
+
+                    <div class="col-4 text-center p-4 m-2">
+
+                        <div>
+                            <h5 class="mb-3">업로드한 이벤트 이미지</h5>
+                        </div>
+
+                        <div class="image-container">
+                            <img class="img-fluid" id="eventImagePreview" src="#" alt="Event Image Preview" style="display: none; max-width: 300px; max-height: 200px;">
+                            <button id="deleteEventButton" class="delete-button" style="display: none" onclick="deleteImage('eventImagePreview')">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group m-3">
+                <label>등록일</label>
+                <input type="text" class="form-control" th:value="${#temporals.format(eventDto.regdate, 'yyyy/MM/dd')}" readonly>
+            </div>        
+
+        </form>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-end">
+            <button type="button" class="btn btn-outline-primary modifyBtn">수정완료</button>
+            <button type="button" class="btn btn-outline-dark listBtn">목록</button>                
+        </div>
+
+        <script th:inline="javascript">
+
+            function previewCarouselImage() {
+
+                var carouselImageInput = document.getElementById("carouselImageInput");
+                var carouselImagePreview = document.getElementById("carouselImagePreview");
+                var deleteCarouselButton = document.getElementById("deleteCarouselButton");                
+                var file = carouselImageInput.files[0];
+                var reader = new FileReader();
+        
+                reader.onload = function(e) {           
+
+                    carouselImagePreview.style.display = "block";
+                    carouselImagePreview.src = e.target.result;
+                    deleteCarouselButton.style.display = "block";                    
+                    carouselImagePreview.style.margin = "auto";
+
+                };
+        
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            }
+        
+            function previewEventImage() {
+
+                var eventImageInput = document.getElementById("eventImageInput");
+                var eventImagePreview = document.getElementById("eventImagePreview");
+                var deleteEventButton = document.getElementById("deleteEventButton");                
+                var file = eventImageInput.files[0];
+                var reader = new FileReader();
+        
+                reader.onload = function(e) {                    
+                    eventImagePreview.style.display = "block";
+                    eventImagePreview.src = e.target.result;
+                    deleteEventButton.style.display = "block";                    
+                    eventImagePreview.style.margin = "auto";
+                };
+        
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+
+            }
+
+            function deleteImage(imageId) {
+
+                var imageElement = document.getElementById(imageId);
+
+                if (imageElement) {
+                    imageElement.style.display = "none";
+                }
+
+                if (imageId === "carouselImagePreview") {
+
+                    var deleteCarouselButton = document.getElementById("deleteCarouselButton");                    
+                    var imageInput = document.getElementById("carouselImageInput");
+
+                    if (deleteCarouselButton) {
+                        deleteCarouselButton.style.display = "none";                        
+                    }
+
+                    if (imageInput) {
+                        imageInput.value = "";
+                    }
+
+                    var newFileReader = new FileReader();
+                    var newImageInput = document.getElementById("carouselImageInput");
+
+                    newFileReader.onload = function (e) {
+                        var carouselImagePreview = document.getElementById("carouselImagePreview");
+                        carouselImagePreview.style.display = "block";
+                        carouselImagePreview.src = e.target.result;
+                    };
+
+                    if (newImageInput.files.length > 0) {
+                        newFileReader.readAsDataURL(newImageInput.files[0]);
+                    }
+
+                }
+
+                if (imageId === "eventImagePreview") {
+
+                    var deleteEventButton = document.getElementById("deleteEventButton");                    
+                    var eventImageInput = document.getElementById("eventImageInput");
+
+                    if (deleteEventButton) {
+                        deleteEventButton.style.display = "none";                        
+                    }
+
+                    if (eventImageInput) {
+                        eventImageInput.value = "";
+                    }
+
+                    var newFileReader = new FileReader();
+                    var newImageInput = document.getElementById("eventImageInput");
+
+                    newFileReader.onload = function (e) {
+
+                        var eventImagePreview = document.getElementById("eventImagePreview");
+                        eventImagePreview.style.display = "block";
+                        eventImagePreview.src = e.target.result;
+
+                    };
+
+                    if (newImageInput.files.length > 0) {
+                        newFileReader.readAsDataURL(newImageInput.files[0]);
+                    }
+                }
+
+                event.preventDefault(); // 기본 폼 제출 동작을 막습니다.
+            }
+
+            var actionForm = $("form");
+        
+            $(".modifyBtn").click(function() {
+
+                var titleValue = $("input[name='title']").val().trim();
+                var contentValue = $("textarea[name='content']").val().trim();
+
+                if (titleValue === "" || contentValue === "") {
+                    alert("제목과 내용을 모두 입력해주세요.");
+                    return;
+                }
+
+                if (confirm("수정하시겠습니까?")) {                    
+                    
+                    actionForm.attr("action", "/event/modify");
+                    actionForm.attr("method", "post");
+                    actionForm.submit();
+
+                    alert("수정이 완료되었습니다.");
+
+                }          
+
+            });
+        
+            $(".listBtn").click(function() {
+
+                var page = $("input[name='page']").val();
+
+                actionForm.empty();
+                actionForm.append('<input type="hidden" name="page" value="' + page + '">');
+                actionForm.attr("action", "/event/list");
+                actionForm.attr("method", "get");
+                actionForm.submit();
+                
+            });
+
+        </script>
+
+    </th:block>
+
+</th:block>

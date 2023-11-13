@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/question/question.css">
+
+    <div class="container" id="menu">
+        <div class="row">
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/notice') ? 'activeL' : ''}" th:href="@{/notice/list}">공지사항</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/faq') ? 'activeL' : ''}" th:href="@{/faq/list}">자주 묻는 질문</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/question') ? 'activeL' : ''}" th:href="@{/question/list}">1:1 문의</a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <h3 class="m-3">1:1 문의</h3>
+
+        <div id="titleBox" class="pt-3 pb-3">
+            <h4 id="title">[[${questionDto.title}]]</h4>            
+        </div>
+
+        <div id="writer" class="pt-3 pb-3">
+            <span id="writer-nickname"><strong>[[${questionDto.nickname}]]</strong><br>[[${questionDto.email}]]</span>
+            <span id="regdate">[[${#temporals.format(questionDto.regdate, 'yyyy-MM-dd hh:mm:ss')}]]</span>
+        </div>
+
+        <div class="content">
+            <p>[[${questionDto.content}]]</p>
+        </div>
+        
+        <div id="writer" class="pt-3 pb-3" th:if="${questionDto.ansdate != null}">
+            <span id="writer-nickname">관리자</span>
+            <span id="regdate">[[${#temporals.format(questionDto.ansdate, 'yyyy-MM-dd hh:mm:ss')}]]</span>
+        </div>
+
+        <div class="content" th:if="${questionDto.answer != null}">
+            <p>[[${questionDto.answer}]]</p>
+        </div>
+    
+    </div>
+
+    <div class="d-grid gap-2 d-flex justify-content-center mt-3 row" id="btnBox">
+
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <a th:href="@{/question/modify(qno = ${questionDto.qno}, page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-outline-primary btn-lg">답변</button>
+            </a>
+        </div>
+        
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <form id="deleteForm" action="/question/delete" method="post">
+                <input type="hidden" name="qno" th:value="${questionDto.qno}">
+                <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                <button type="button" class="btn btn-outline-danger btn-lg" onclick="confirmDelete()">삭제</button>
+            </form>
+        </div>
+
+        <div class="col-2">
+            <a th:href="@{/question/list(page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-lg listBtn">목록</button>
+            </a>
+        </div>
+        
+    </div>
+
+    <script>
+        function confirmDelete() {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                document.getElementById("deleteForm").submit();
+            }
+        }
+    </script>
+
+    </th:block>
+
+</th:block>

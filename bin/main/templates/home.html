@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+      <link rel="stylesheet" type="text/css" href="/css/home.css">
+
+      <!--carousel-->
+      <div class="container mt-5">
+
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+
+          <div class="carousel-indicators">
+            <th:block th:each="eventDto, iterStat : ${resultEvent.dtoList}">
+              <button type="button" data-bs-target="#carouselExampleCaptions" th:attr="data-bs-slide-to=${iterStat.index}" th:classappend="${iterStat.index == 0} ? 'active' : ''" aria-label="Slide [[${iterStat.index + 1}]]"></button>
+            </th:block>
+          </div>
+
+          <div class="carousel-inner" style="height: 450px;">
+            <th:block th:each="eventDto, iterStat : ${resultEvent.dtoList}">
+              <div th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+
+                <a th:href="@{/event/read(evno=${eventDto.evno})}">
+                  <img th:src="@{/carouselImg/{carouselImg}(carouselImg=${eventDto.carouselImg})}" class="d-block w-100" alt="">
+                </a>
+
+                <div class="gap-2 d-block" id="eventBadge">
+
+                  <h4><span class="badge rounded-pill badge-dark bg-info">EVENT</span></h4>
+
+                  <div id="eventInfo">
+                    <h1>[[${eventDto.title}]]</h1>
+                    <h5>[[${eventDto.content}]]</h5>
+                  </div>        
+                            
+                </div>
+
+              </div>
+            </th:block>
+          </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+
+        </div>
+
+      </div>
+      <!--carousel.end-->
+
+      <!--novel-->
+      <div id="mainNovels" class="container mt-5">
+
+        <div class="row">
+          <div class="col d-grid gap-2 d-flex justify-content-start px-4 mb-3">
+            <h3>인기 웹소설 TOP 10</h3>
+          </div>
+          <div class="col d-grid gap-2 d-flex justify-content-end align-items-end px-2">
+            <a th:href="@{/novel/total}" class="btn btn-sm btn-outline-*" id="moreBtn">more ></a>          
+          </div>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-sm-3 row-cols-md-5 g-10">
+          <div class="col mt-3 mb-3" th:each="novelDto, iterStat : ${resultNovel.dtoList}">
+
+            <div id="ranking">
+              <h1 th:text="${iterStat.count}" th:classappend="${iterStat.count < 4} ? 'large-number' : 'small-number'"></h1>
+            </div>   
+
+            <div class="card">
+
+              <a th:href="@{/episode/list(nno=${novelDto.nno})}">
+                <img th:src="@{/thumbnail/{thumbnail}(thumbnail=${novelDto.thumbnail})}" alt="thumbnail">
+              </a> 
+
+              <div class="card-body">
+
+                <div class="gap-2 d-block" id="newandup">
+                  <span th:if="${novelDto.regdate.isAfter(isNew)}" class="badge rounded-pill badge-dark bg-primary">NEW</span>
+                  <span th:if="${novelDto.mostRecentReg != null and novelDto.mostRecentReg.isAfter(isUp)}" class="badge rounded-pill badge-dark bg-danger">UP</span>
+                </div>
+                                     
+                <h5 class="card-title text-center">
+                  [[${novelDto.title}]]                  
+                </h5>
+
+                <p class="card-text text-center" th:text="${novelDto.nickname}"></p>
+
+              </div>
+
+            </div>
+
+            <div class="col"> <!--간격조절을 위한 div-->
+            </div>  
+
+          </div> 
+
+        </div>
+      </div>
+       <!--novel.end-->
+
+    </th:block>
+
+</th:block>
+</html>

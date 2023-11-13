@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/novel/novel.css">
+    <script type="text/javascript" th:src="@{/js/novel/fantasy.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+        <h1 class="m-3 text-center">소설 정보 수정</h1>
+
+        <form action="/novel/modify" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+            <input type="hidden" name="nno" th:value="${novelDto.nno}">
+
+            <div class="form-group m-3">
+                <label>장르</label>
+                <select class="form-select" name="category" th:value="${novelDto.category}">                    
+                    <option th:selected="${novelDto.category} == '판타지'">판타지</option>
+                    <option th:selected="${novelDto.category} == '무협'">무협</option>
+                    <option th:selected="${novelDto.category} == '현대'">현대</option>
+                    <option th:selected="${novelDto.category} == '로맨스'">로맨스</option>
+                    <option th:selected="${novelDto.category} == '기타'">기타</option>
+                </select>
+            </div>
+            
+            <div class="form-group m-3">
+                <label>완결여부</label>
+                <input type="checkbox" class="form-check-input" name="completed" th:checked="${novelDto.completed}">
+            </div>
+
+            <div class="form-group m-3">
+                <label>제목</label>
+                <input type="text" class="form-control" name="title" th:value="${novelDto.title}" required>
+            </div>
+
+            <div class="form-group m-3">
+                <label>내용</label>
+                <textarea class="form-control" rows="5" name="content" required>[[${novelDto.content}]]</textarea>
+            </div>
+
+            <div class="form-group m-3">
+                <label>표지 업로드</label><br>
+                <input type="file" class="form-control-file" id="imageInput" name="imageFile" accept="image/*" onchange="previewImage()">
+            </div>
+
+            <div class="container" id="uploadImgBox">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-4 text-center p-4 m-2">
+                        <div>
+                            <h5 class="mb-3">기존 이미지</h5>
+                        </div>
+                        <div class="image-container">
+                            <img class="img-fluid" id="existingImage" th:src="@{/thumbnail/{thumbnail}(thumbnail=${novelDto.thumbnail})}" alt="Novel Image" style="max-width: 300px; max-height: 200px;">                            
+                        </div>
+                    </div>
+
+                    <div class="col-4 text-center p-4 m-2">
+                        <div>
+                            <h5 class="mb-3">업로드한 이미지</h5>
+                        </div>
+                        <div class="image-container">
+                            <img class="img-fluid" id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 300px; max-height: 200px;">
+                            <button id="deleteButton" class="delete-button" style="display: none" onclick="deleteImage('imagePreview')">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>                            
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group m-3">
+                <label>등록일</label>
+                <input type="text" class="form-control" th:value="${#temporals.format(novelDto.regdate, 'yyyy/MM/dd')}" readonly>
+            </div>        
+
+        </form>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-end">
+            <button type="button" class="btn btn-outline-primary modifyBtn">수정완료</button>
+            <button type="button" class="btn btn-outline-dark listBtn">목록</button>                
+        </div>
+
+        <script th:inline="javascript">
+
+            function previewImage() {
+
+                var imageInput = document.getElementById("imageInput");
+                var imagePreview = document.getElementById("imagePreview");
+                var deleteButton = document.getElementById("deleteButton");
+                var file = imageInput.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.style.display = "block";
+                    imagePreview.src = e.target.result;
+                    deleteButton.style.display = "block";
+                    imagePreview.style.margin = "auto";
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+
+            }
+
+            function deleteImage(imageId) {
+
+                var imageElement = document.getElementById(imageId);
+
+                if (imageElement) {
+                    imageElement.style.display = "none";
+                }
+
+                if (imageId === "imagePreview") {
+
+                    var deleteButton = document.getElementById("deleteButton");
+
+                    if (deleteButton) {
+                        deleteButton.style.display = "none";
+                    }
+
+                    var imageInput = document.getElementById("imageInput");
+
+                    if (imageInput) {
+                        imageInput.value = "";
+                    }
+
+                    var newFileReader = new FileReader();
+                    var newImageInput = document.getElementById("imageInput");
+
+                    newFileReader.onload = function (e) {
+
+                        var imagePreview = document.getElementById("imagePreview");
+
+                        imagePreview.style.display = "block";
+                        imagePreview.src = e.target.result;
+
+                    };
+
+                    if (newImageInput.files.length > 0) {
+                        newFileReader.readAsDataURL(newImageInput.files[0]);
+                    }
+                }
+                
+                event.preventDefault(); // modify 함수 호출을 막기 위해 추가
+
+            }
+
+            var actionForm = $("form");
+        
+            $(".modifyBtn").click(function() {
+
+                var titleValue = $("input[name='title']").val().trim();
+                var contentValue = $("textarea[name='content']").val().trim();
+
+                if (titleValue === "" || contentValue === "") {
+                    alert("제목과 내용을 모두 입력해주세요.");
+                    return;
+                }
+
+                if (confirm("수정하시겠습니까?")) {    
+
+                    actionForm.attr("action", "/novel/modify");
+                    actionForm.attr("method", "post");
+                    actionForm.submit();
+
+                    alert("수정이 완료되었습니다.");
+
+                }          
+
+            });
+        
+            $(".listBtn").click(function() {
+
+                var username = [[${username}]];
+
+                actionForm.empty();
+                actionForm.append('<input type="hidden" name="email" value="' + username + '">');
+                actionForm.attr("action", "/library/myNovel?email=" + username);
+                actionForm.attr("method", "get");
+                actionForm.submit();
+                
+            });
+
+        </script>
+
+    </th:block>
+
+</th:block>

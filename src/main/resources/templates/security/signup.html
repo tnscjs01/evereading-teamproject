@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/security/loginSignup.css}">
+
+        <div class="container" id="box">
+            <div class="mx-5 my-5 px-5 py-5">
+                <div class="row d-flex justify-content-center" id="choose">
+                    <div class="col-6 text-center px-1 py-1"><a class="px-1 py-1 on" href="/security/signup">회원가입</a></div>
+                    <div class="col-6 text-center px-1 py-1"><a class="px-1 py-1" href="/security/login">로그인</a></div>
+                </div>
+                
+                <div class="mt-5" id="Form">
+                    <div class="text text-center">
+                        <p class="fw-bold">이메일</p><p>로 가입하기</p>
+                    </div>
+                    
+                    <form class=" form-group input-sm" method="post" action="/security/signup" onsubmit="return validateForm();">
+                        <div class="form-group row">
+                            <input type="eamil" class="form-control col me-2" id="email" name="email" placeholder="이메일" autofocus>
+                            <button type="button" class="btn col-4 btn-outline-default" id="emailCheck">인증코드 발송</button>
+                        </div>
+                        <div class="form-group mb-2 row" id="inputBox">
+                            
+                        </div>
+                        <div class="form-group mb-2 row">
+                            <input type="text" class="form-control col me-2" id="nickname" name="nickname" placeholder="닉네임">
+                            <button type="button" class="btn col-4 btn-outline-default" id="nicknameCheck">중복확인</button>
+                        </div>
+                        <div class="form-group mb-2">
+                            <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호">
+                        </div>
+                        <div class="form-group mb-2">
+                            <input type="password" class="form-control" id="pwCheck" placeholder="비밀번호 확인">
+                        </div>
+                        <div class="d-grid gap-2 ">
+                            <button class="btn btn-outline-default mb-3" type="submit">회원가입</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-center mt-3 py-1" id="social">
+                    <img src="/img/googlelogo.png" alt="google" >
+                    <p class=""><a href="/oauth2/authorization/google">Google로 가입하기</a></p>
+                </div>
+            </div>
+        </div>
+ 
+        <script>
+            
+            const xhttp = new XMLHttpRequest();
+            const sform = document.forms["form"];
+            const nickname = document.getElementById("nickname");
+            const email = document.getElementById('email');
+            const pw = document.getElementById('pw');
+            const pwCheck = document.getElementById('pwCheck');
+            const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+            let specialCheck = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+            let emailCk = null;
+            let nicknameck = null;
+            let emailCode = null;
+            
+            
+
+            document.getElementById("emailCheck").addEventListener('click', () => {
+                
+                if(!email.value){
+                    alert("이메일을 입력해주세요")
+                    email.focus();
+                    return false;
+                }
+                if(pattern.test(email.value) === false){ 
+                    alert("올바른 이메일 주소를 입력해주세요")
+                    email.focus();
+                    return false; 
+                    console.log("확인"+pattern)
+                }
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        let result = xhttp.response;
+                        if(result == ""){
+                            alert("이미 가입된 회원입니다.");
+                            email.focus();
+                            return false;
+                        }
+                        alert("인증코드를 보냈습니다.");
+                        emailCode = result;
+                        document.getElementById('inputBox').innerHTML = 
+                            '<input type="text" class="form-control col me-2 mt-2" id="code" placeholder="인증번호 입력">' +
+                            '<button type="button" class="btn col-4 btn-outline-default mt-2" id="verificationEmail">이메일 인증</button>';
+                    }
+                };
+                xhttp.open("GET","/emailCheck/"+email.value, true)
+                xhttp.send(); 
+
+               
+                        
+            });
+
+            document.getElementById('inputBox').addEventListener('click', function (event) {
+                if (event.target.id === 'verificationEmail') {
+                    let emailCodeinput = document.getElementById('code').value;
+                    if (emailCode == emailCodeinput) {
+                        document.getElementById('inputBox').innerHTML = 
+                                '<input type="text" class="border-0 text-danger" value="이메일 인증이 완료되었습니다." readonly>'
+                        emailCk = 1;
+                        return
+                    }
+                    alert("인증번호가 일치하지 않습니다.");
+                }
+            });
+    
+
+            document.getElementById("nicknameCheck").addEventListener('click', () => {
+                let nickLength = 0;
+                for(let i=0; i<nickname.value.length; i++){ //한글은 2, 영문은 1로 치환
+                    nick = nickname.value.charAt(i);
+                    if(escape(nick).length >4){
+                        nickLength += 2;
+                    }else{
+                        nickLength += 1;
+                    }
+                }
+                
+                if(!nickname.value){
+                    alert("닉네임을 입력해주세요")
+                    nickname.focus();
+                    return false;
+                }
+                if(nickname.value.search(/\s/) != -1) {
+                    alert("닉네임은 빈 칸을 포함 할 수 없습니다.");
+                    nickname.focus();
+                    return false;
+                } 
+                if(specialCheck.test(nickname.value)) {
+                    alert("닉네임은 특수문자를 포함 할 수 없습니다.");
+                    nickname.focus();
+                    return false;
+                }
+                if (nickLength<2 || nickLength>20) {
+                    alert("닉네임은 한글 1~10자, 영문 및 숫자 2~20자 입니다.");
+                    nickname.focus();
+                    return false;
+                }
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        let result = xhttp.response;
+                        if(result == 0){
+                            alert("사용가능한 닉네임입니다");
+                            nicknameck = 1;
+                            return 
+                        }
+                        alert("사용중인 닉네임입니다.");
+                        nickname.focus();
+    
+                        console.log(result);
+                    }
+                };
+                xhttp.open("GET","/duplicateCheck/"+nickname.value, true)
+                xhttp.send(); 
+    
+            });
+    
+
+            function validateForm(){
+                
+                if(emailCk != 1){
+                    alert("이메일을 확인해주세요")
+                    email.focus();
+                    return false
+                }
+                if(nicknameck != 1){
+                    alert("닉네임을 확인해주세요")
+                    nickname.focus();
+                    return false
+                }
+                if(pw.value == ""){
+                    alert("비밀번호를 입력해주세요")
+                    pw.focus();
+                    return false
+                }
+                if(pw.value != pwCheck.value){
+                    alert("비밀번호가 일치하지 않습니다")
+                    pwCheck.focus();
+                    return false
+                }
+            }
+        </script>
+
+    </th:block>
+
+</th:block>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/episode/episode.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        .epiBox{
+            width: 100%;
+            height: auto;
+            text-align: center;
+            list-style: none;
+            text-align: center;
+            line-height: 75px;
+            margin-bottom: 50px;
+            margin-top: 50px;
+            padding: 0px;
+        }
+        .epiBox a{
+            color: #35afbd;
+        }
+        .epiBox li{
+            display: inline-block;
+            font-size: 30px;
+        }
+        .epiBox li:nth-child(2){
+            line-height: 40px;
+        }
+        .arrow{
+            border: solid 1px lightgray;
+            width: 75px;
+            height: 75px;
+            border-radius: 100%;
+            margin: auto;
+        }
+        .arrow p{
+            color: gray;
+        }
+        .addReply{
+            /* position: absolute; */
+            width: 10%;
+            background-color: #34AFBC;
+            color: #fff;
+            margin-bottom: 0px;
+        }
+        #replyWrite{
+            display: flex;
+            width: 100%;
+            height: 50px;
+            margin: 30px 0px;
+            padding: 0px 5%;
+        }
+        #replyWrite .reply{
+            width: 75% !important;
+            border-radius: 7px 0 0 7px !important;
+            border: solid 1px gray;
+            height: 74px;
+        }
+        .epiContent h2{
+            text-align: left;
+            margin-top: 20px;
+            border-bottom: solid 2px black;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .listBtn {
+            width: 14% !important;
+            border-color: #34AFBC;
+            color: #34AFBC;
+            background-color: #fff;
+            font-weight: bolder;
+        }
+        .listBtn:hover{
+            background-color: #34AFBC;
+            color: white;
+        }
+        .form-control:focus{
+            outline: none;
+        }
+        #note{
+            width: 100%;
+            border: solid 1px lightgray;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        #note:focus{
+            outline: none;
+        }
+        .replyList{
+            margin: 10px auto;
+            border: solid 1px lightgray;
+            border-radius: 10px;
+            width: 1020px;
+            box-shadow: 0 0 5px 2px lightgray;
+            text-align: left;
+            
+        }
+        .replyList textarea{
+            border: none;
+            width: 79%;
+            margin-left: 20px;
+            overflow: hidden;
+            background-color: white;
+            height: 24px;
+        }
+        .replyList span:nth-child(1){
+            width: 90%;
+            padding-top: 10px;
+            float: left;
+            padding-left: 20px;
+            font-weight: 600;
+        }
+        .replyList span:nth-child(2){
+           float: right;
+           width: 5%;
+           cursor: pointer;
+           text-align: center;
+           color: #34AFBC;
+           margin-top: 10px;
+        }
+        .replyList p{
+            color: gray;
+            padding-left: 20px;
+            /* display: inline-block; */
+            font-size: 14px;
+            text-align: left;
+            position: relative;
+        }
+        .togglebtn {
+            width: 100% !important;
+            border-color: #fff;
+            background-color: #fff;
+            border-radius: 50px;
+            color: #34AFBC;
+            border: none;
+            font-size: 25px;
+        }
+        .replybtn {
+            text-align: center;
+            width: 99%;
+            margin: 1px;
+            background-color: #fff;
+            color: #34AFBC;
+        }
+        .replyeditbtn {
+            float: right !important;
+            width: 5%;
+        }
+
+        .dropdown-menu button:hover{
+            background-color: #34AFBC;
+            color: white;
+        }
+    </style>
+    <div class="container epiContent">
+        <h2>[[${novel.title}]]</h2>
+            <ul class="epiBox row">
+                <li class="col-lg-2">
+                    <div class="arrow" th:if="${pre}">
+                        <a th:href="@{/episode/viewer(nno=${dto.nno},eno=${pre})}" ><i class="fa-solid fa-chevron-left"></i></a>
+                    </div>
+                </li>
+                <li class="col-lg-8">
+                    <p>제 [[${dto.episodeNum}]] 화</p>
+                    <a th:href="@{/episode/viewer(nno=${dto.nno},eno=${dto.eno})}">[[${dto.title}]]</a>
+                </li>
+                <li class="col-lg-2">
+                    <div class="arrow" th:if="${next}">
+                        <a th:href="@{/episode/viewer(nno=${dto.nno},eno=${next})}" ><i class="fa-solid fa-chevron-right"></i></a> 
+                    </div>
+                </li>
+            </ul>
+        <div>
+            <label><i class="fa-solid fa-pen-nib" style="color: #35afbd;"></i> 작가의 말</label>
+            <textarea id="note" rows="4" readonly>[[${dto.note}]]</textarea>
+        </div>
+        <div class="btns">
+            <a th:href="@{/episode/list(nno=${dto.nno})}" class="btn btn-lg listBtn">목 록</a>
+        </div>
+    </div>
+
+    <!-- 댓글-------------->
+    <div class="container">
+        <div sec:authorize="isAuthenticated()" id="replyWrite" class="input-group">
+            <!-- 댓글 작성 시 닉네임 출력될때 재사용하기... 지금은 recent novel용으로만 작성 -->
+            <input type="hidden" id="username" th:value="${#authentication.principal.username}">
+            <textarea class="form-control reply" name="content" placeholder="댓글을 입력하세요"></textarea>
+            <button class="btn btn-outline-default addReply">댓글등록</button>
+        </div>
+        <!-- 댓글 출력 -->
+        <div class="container">
+            <div style="font-size: 20px; margin-left: 50px; margin-top: 40px;">
+                <i class="fa-solid fa-comment-dots" style="color: #34AFBC;"><span th:text="${dto.replyCount==0?'':dto.replyCount}"></span></i> Comments
+            </div>
+            <div class="replyList" th:each=" reply : ${reply.dtoList}">
+                <span>[[${reply.nickName}]]</span>
+                <span class="replyeditbtn" sec:authorize="isAuthenticated()" th:if="${reply.email == #authentication.principal.username}">
+                    <button class="togglebtn" id="dropdownMenuClickable" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-justify" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"></path>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" th:data-erno="${reply.erno}">
+                        <button class="btn btn-sm dropdown-item modifyReply replybtn">수정</button>
+                        <button class="btn btn-sm dropdown-item updateReply replybtn" style="display: none;">수정완료</button>
+                        <button class="btn btn-sm dropdown-item close replybtn" style="display: none;">닫기</button>
+                        <button class="btn btn-sm dropdown-item removeReply replybtn">삭제</button>
+                    </ul>
+                </span>
+                <textarea class="editContents" disabled>[[${reply.content}]]</textarea>
+                <p>[[${#temporals.format(reply.regdate, 'yyyy/MM/dd')}]]</p>
+            </div>
+        </div>
+
+
+       
+        <!-- 댓글 페이징 -->
+        <div class="replyPagenation">
+            <ul class="pagination h-100 justify-content-center align-items-center">
+                <li class="page-item " th:if="${reply.prev}">
+                    <a class="page-link" th:href="@{#(page= ${reply.start -1}, nno=${dto.nno}), eno=${dto.eno}}" tabindex="-1">Previous</a>
+                </li>
+    
+                <li th:class=" 'page-item ' + ${reply.page == page?'active':''} " th:each="page: ${reply.pageList}">
+                    <a class="page-link" th:href="@{/episode/read(page = ${page}, nno=${dto.nno}, eno=${dto.eno})}">
+                        [[${page}]]
+                    </a>
+                </li>
+    
+                <li class="page-item" th:if="${reply.next}">
+                    <a class="page-link" th:href="@{#(page= ${reply.end + 1}, nno=${dto.nno} , eno=${dto.eno})}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function(){ 
+
+        var eno = [[${dto.eno}]];
+        var email = $("#username").val();
+
+        //댓글 추가
+        $('.addReply').click(function(){
+            var inputContent = $('textarea[name="content"]');
+            var length = inputContent.val().length;
+            if(length==0){
+                alert("댓글 내용을 입력하세요.");
+                $('.reply').focus();
+                return false;
+            }
+
+            var data = {eno:eno, content:inputContent.val(), email:email};
+            
+            $.ajax({
+                url:'/episodeReply/'+eno,
+                type:"POST",
+                data:JSON.stringify(data),
+                contentType:"application/json; charset=utf-8",
+                dataType:"text",
+                success:function(result){
+                    self.location.reload();
+                }
+            })
+        });
+
+        //삭제
+        $('.removeReply').click(function(){
+            var erno = $(this).parent().data("erno");
+            console.log(erno);        
+            var data = {erno:erno};
+            if(confirm('댓글을 삭제하시겠습니까?')){
+                $.ajax({
+                url:'/episodeReply/'+eno+'/'+erno ,
+                type:"DELETE",
+                contentType:"application/json; charset=utf-8",
+                dataType:"text",
+                success:function(result){
+                    self.location.reload();
+                }
+            })
+            }
+        });
+
+        //수정
+        $('.updateReply').click(function(){
+            var erno = $(this).parent().data("erno");
+            var content = $(this).closest('.replyList').find('.editContents').val();
+            console.log(content);
+            var data = {erno:erno, content:content, eno:eno}
+            
+            $.ajax({
+                url:'/episodeReply/'+eno+'/'+erno ,
+                type:'PUT',
+                data:JSON.stringify(data),
+                contentType:"application/json; charset=utf-8",
+                dataType:"text",
+                success:function(result){
+                    self.location.reload();
+                    alert('수정되었습니다.');
+                }
+            })
+        });
+
+         // 수정 폼 열기
+         $('.modifyReply').click(function() {
+            $(this).parent().parent().next().css('border', "1px solid"); // 수정 폼 보이게
+            $(this).parent().parent().next().attr("disabled",false); // 수정 폼 보이게
+            $(this).next().css('display','inline-block'); // 수정 완료버튼 보이게
+            $(this).next().next().css('display','inline-block'); // 수정 닫기버튼 보이게
+            $('.modifyReply').css('display','none'); // 수정버튼 안보이게
+            $('.removeReply').css('display','none'); // 삭제버튼 안보이게
+        });
+
+        // 수정 폼 닫기
+        $('.close').click(function(){
+            $('.editContents').css('border', "0");
+            $('.editContents').attr("disabled",true);
+            $('.updateReply').css('display','none');
+            $('.modifyReply').css('display','inline-block');
+            $('.close').css('display', 'none');
+            $('.removeReply').css('display','inline-block');
+        });
+
+        // 수정닫기버튼 클릭시 새로고침 
+        $('.close').click(function(){
+            self.location.reload();
+        })
+
+        // textarea 자동 높이 변환
+        $('.replyList textarea').on('keyup', function (e){
+            $(this).css('height', '24px');
+            $(this).height(this.scrollHeight);
+        });
+        $('.replyList textarea').keyup();
+
+    });
+</script>
+
+</th:block> 
+</th:block>
+</html>

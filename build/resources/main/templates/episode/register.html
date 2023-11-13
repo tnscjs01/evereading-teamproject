@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/episode/episode.css}">
+    <style>
+        .textLength, .titleLength, .noteLength{
+            color: lightgray;
+            float: right;
+        }
+    </style>
+    <div class="container">
+        <h2>소설쓰기</h1>
+        <form method="post">
+            <div class="form-group">
+                <lable>제목<span class="titleLength">0/50</span></lable>
+                <input type="text" name="title" placeholder="제목을 입력하세요." class="form-control title" maxlength="50">
+            </div>
+
+            <div class="form-group">
+                <lable>내용<span class="textLength">0/20000</span></lable>
+                <textarea name="content" placeholder="내용을 입력하세요." rows="20" class="form-control content" maxlength="20000"></textarea>
+                
+            </div>
+
+            <div class="form-group">
+                <lable>작가의 말<span class="noteLength">0/200</span></lable>
+                <textarea name="note" placeholder="작가의 말을 입력하세요." rows="3" class="form-control note" maxlength="200"></textarea>
+            </div>
+            <div class="btns">
+                <button class="btn btn-outline-default reg">글쓰기</button>
+                <a th:href="@{/episode/list(nno=${nno})}" class="btn btn-outline-default">목록</a>
+             </div>
+        </form>
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.reg').click(function(e){
+            e.preventDefault();
+            if($('.title').val()===""){
+                alert("제목을 입력하세요.");
+                $('.title').focus();
+                return false;
+            }else if($('.content').val()===""){
+                alert("내용을 입력하세요.");
+                $('.content').focus();
+                return false;
+            }
+
+            alert("등록되었습니다.");
+            $("form").submit();
+        });
+
+        //글자 수 변경
+        $('.content').on('input',function(){
+            var length = $(this).val();
+            $('.textLength').text(length.length+'/20000');
+        });
+        $('.title').on('input',function(){
+            var length = $(this).val();
+            $('.titleLength').text(length.length+'/50');
+        });
+        $('.note').on('input',function(){
+            var length = $(this).val();
+            $('.noteLength').text(length.length+'/200');
+        });
+
+    });
+</script>
+
+</th:block> 
+</th:block>
+</html>

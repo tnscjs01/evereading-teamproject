@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>애브리딩</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* 기본 폰트 */
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+        /* 바탕체 */
+        @font-face {
+            font-family: 'RIDIBatang';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        /* 바른체 */
+        @font-face {
+            font-family: 'NanumBarunpen';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumBarunpen.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        *{
+            font-family: 'Pretendard-Regular';
+        }
+        *:focus {
+            outline: 0 !important;
+        }
+        a{
+            color:#35afbd;
+            text-decoration: none;
+        }
+        .nav{
+           height: 70px;
+           font-size: 20px;
+           width: 100%;
+           line-height: 70px;
+           background-color: white;
+           border-bottom: solid 0px #35afbd;
+           overflow-y: hidden;
+           transition: all 0.3s;
+           position: fixed;
+           box-shadow: 0px 0px 20px gray;
+        }
+        .nav ul{
+            width: 100%;
+            text-align: center;
+            display: block;
+        }
+        .nav li{
+            display: inline-block;
+        }
+        .nav .nav-item:nth-child(1){
+            float: left;
+        }
+        .nav .nav-item:nth-child(3){
+            float: right;
+        }
+
+        .setBtn{
+            background-color: #35afbd;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            position: relative;
+            border-radius: 100%;
+            cursor: pointer;
+            top: 9px;
+            right: 10px;
+        }
+        .content textarea{
+            /* 배경색 투명 */
+            background-color: transparent;
+            width: 100%;
+             /* 기본값. */
+            height: 100px;
+            border-radius: 5px;
+            padding: 40px;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            overflow: hidden;
+            font-size: 24px;
+        }
+
+        /* 내용 */
+        .setting{
+            width: 340px;
+            height: 360px;
+            position: fixed;
+            right: 100px;
+            top: 70px;
+            padding: 20px;
+            display: none;
+            background-color: rgba(255, 255, 255, 0.671);
+        }
+        .setting h5{
+            padding-left: 5px;
+            border-bottom: solid 2px;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+        .setting td{
+            background-color: rgba(255, 255, 255, 0);
+        }
+        .setting ul{
+            float: right;
+            margin-bottom: 0px;
+        }
+        .setting tr{
+            height: 50px;
+            line-height: 50px;
+            
+        }
+        .setting li{
+            list-style: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .thema li{
+            border: solid 1px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+        }
+        .thema1{
+            background-color: white;
+        }
+        .thema2{
+            background-color: rgb(176, 218, 176);
+        }
+        .thema3{
+            background-color: #daccb7;
+        }
+        .thema4{
+            background-color: black;
+            color: #ffffff;
+        }
+        .fontType li{
+            margin-right: 10px;
+        }
+        .fontSize li{
+            margin-right: 10px;
+        }
+        .lineSpace li{
+            margin-right: 10px;
+        }
+        .viewBtn{
+            border: solid 1px #35afbd;
+            padding: 8px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+        }
+        textarea{
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 뷰 메뉴 -->
+    <div class="nav navbar-expand-lg">
+        <ul class="container navbar-nav">
+            <li class="nav-item">
+                <a th:href="@{/episode/list(nno=${dto.nno})}" class="viewBtn"><i class="fa-solid fa-house"></i> 목록</a>
+                <a th:href="@{/episode/read(nno=${dto.nno},eno=${dto.eno})}" class="viewBtn"><i class="fa-regular fa-message"></i> 댓글
+                    <span>[[${dto.replyCount}]]</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <p th:text="${dto.title}"></p>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/episode/viewer(nno=${dto.nno},eno=${pre})}" th:if="${pre}" class="viewBtn"><i class="fa-solid fa-chevron-left"></i> 이전 화</a>
+                <a th:href="@{/episode/viewer(nno=${dto.nno},eno=${next})}" th:if="${next}" class="viewBtn">다음 화 <i class="fa-solid fa-chevron-right"></i></a>
+            </li>
+        </ul>
+
+        <div class="setBtn"><i class="fa-solid fa-gear"></i></div>
+    </div>
+
+    <!-- 소설 본문 -->
+    <div class="content">
+        <div class="container">
+            <textarea rows=150  th:text="${dto.content}" readonly disabled></textarea>
+        </div>
+    </div>
+    
+    <!-- 뷰 설정 -->
+    <div class="card setting">
+        <h5>뷰어 설정</h3>
+        <table class="table">
+            <tr class="thema">
+                <td>테마</td>
+                <td>
+                    <ul>
+                        <li class="thema1">가</li>
+                        <li class="thema2">가</li>
+                        <li class="thema3">가</li>
+                        <li class="thema4">가</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="fontType">
+                <td>글꼴</td>
+                <td>
+                    <ul>
+                        <li class="type1">기본체</li>
+                        <li class="type2">바탕체</li>
+                        <li class="type3">바른체</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="fontSize">
+                <td>글자크기</td>
+                <td>
+                    <ul>
+                        <li class="down">&lt;</li>
+                        <li class="value">3</li>
+                        <li class="up">&gt;</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="lineSpace">
+                <td>줄 간격</td>
+                <td>
+                    <ul>
+                        <li class="down">&lt;</li>
+                        <li class="value">3</li>
+                        <li class="up">&gt;</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <input type="hidden" id="username" th:value="${#authentication.principal.username}">
+    </div>
+    <script th:inline="javascript">
+        //설정 창 on/off
+        document.querySelector('.setBtn').addEventListener("click",function(){
+            let setting = document.querySelector('.setting');
+            let settingStyle = window.getComputedStyle(setting);
+            let display = settingStyle.getPropertyValue("display");
+            console.log(display);
+
+            if(display==='none'){
+                setting.style.display = 'block';
+            }else{
+                setting.style.display = 'none';
+            }
+        });
+
+        const content = document.querySelector('.content');
+        const textarea = document.querySelector('.content textarea');
+
+        //스크롤 올릴때,내릴때 조절
+        const nav = document.querySelector('.nav');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () =>{
+            const currentScroll = window.scrollY;
+
+            if(currentScroll > lastScroll){
+                nav.style.height = '20px';
+                nav.style.borderBottom = 'solid 20px #35afbd';
+            }else{
+                nav.style.height = '70px';
+                nav.style.borderBottom = 'solid 0px #35afbd';
+            }
+
+            lastScroll = currentScroll;
+        })
+
+        //본문 길이로 처음 textarea 길이 정하기
+        textarea.style.height = (textarea.scrollHeight)+'px';
+        if(content.scrollHeight <  window.innerHeight){
+            content.style.height = window.innerHeight +'px';
+        }
+
+        //css변화할때마다 길이 변화
+        const observer = new MutationObserver((mutationsList, observer) => {//동적 변화 감시
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {//스타일 변경 인지 시
+                    textarea.style.height = (textarea.scrollHeight)+'px';
+                }
+            }
+        });
+        // MutationObserver를 div 요소에 연결하고 감시할 속성 설정
+        observer.observe(textarea, { attributes: true, attributeFilter: ['style'] });
+
+        //테마 선택 시
+        document.querySelectorAll('.thema li').forEach(function(li){ //각각의 li들에게 이벤트 추가
+            li.addEventListener("click",function(e){
+                let themaNum = e.target.className;
+                console.log(themaNum);
+                switch(themaNum){
+                    case 'thema1':
+                        content.style.backgroundColor = 'white';
+                        textarea.style.color = '#545454';
+                        break;
+                    case 'thema2':
+                        content.style.backgroundColor = 'rgb(176, 218, 176)';
+                        textarea.style.color = '#545454';
+                        break;
+                    case 'thema3':
+                        content.style.backgroundColor = '#daccb7';
+                        textarea.style.color = '#545454';
+                        break;
+                    case 'thema4':
+                        content.style.backgroundColor = 'black';
+                        textarea.style.color = 'lightgray';
+                        break;
+                }
+            });
+        });
+
+        //글꼴 선택 시
+        document.querySelectorAll('.fontType li').forEach(function(li){
+            li.addEventListener("click",function(e){
+                const typeNum = e.target.className;
+                switch(typeNum){
+                    case 'type1':
+                        textarea.style.fontFamily = 'Pretendard-Regular';
+                        break;
+                    case 'type2':
+                        textarea.style.fontFamily = 'RIDIBatang';
+                        break;
+                    case 'type3':
+                        textarea.style.fontFamily = 'NanumBarunpen';
+                        break;
+                }
+            });
+        });
+
+        //글꼴 크기 기본값 16px? = 2
+        document.querySelectorAll('.fontSize li').forEach(function(li){
+            li.addEventListener("click",function(e){
+                const sizeBtn = e.target.className;
+                const value = document.querySelector('.fontSize .value');
+                const nowSize = parseInt(value.textContent);
+                const currentFontSize = window.getComputedStyle(textarea).getPropertyValue('font-size');
+                console.log(sizeBtn);
+                if(sizeBtn == 'down'){
+                    if(nowSize === 1){
+                        // 1이 최솟값이라 동작X
+                    }else{
+                        value.textContent = (nowSize - 1).toString();
+                        textarea.style.fontSize = (parseInt(currentFontSize) - 2) + 'px';
+                        textarea.style.height = (textarea.scrollHeight + 100)+'px';//박스 길이 수정용
+                    }
+                }else if(sizeBtn == 'up'){
+                    if(nowSize === 7){
+                        // 7이 최댓값
+                    }else{
+                        value.textContent = (nowSize + 1).toString();
+                        textarea.style.fontSize = (parseInt(currentFontSize) + 2) + 'px';
+                        textarea.style.height = (textarea.scrollHeight + 100)+'px';//박스 길이 수정용
+                    }
+                }
+            });
+        });
+
+        //줄 간격
+        document.querySelectorAll('.lineSpace li').forEach(function(li){
+            li.addEventListener("click",function(e){
+                const sizeBtn = e.target.className;
+                const value = document.querySelector('.lineSpace .value');
+                const nowSize = parseInt(value.textContent);
+                const currentLineSpace = window.getComputedStyle(textarea).getPropertyValue('line-height');
+                console.log(sizeBtn);
+                console.log(parseInt(currentLineSpace));
+                if(sizeBtn == 'down'){
+                    if(nowSize === 1){
+                        // 1이 최솟값이라 동작X
+                    }else{
+                        value.textContent = (nowSize - 1).toString();
+                        textarea.style.lineHeight = (parseInt(currentLineSpace)/1.5) + 'px';
+                        textarea.style.height = (textarea.scrollHeight + 100)+'px';//박스 길이 수정용
+                    }
+                }else if(sizeBtn == 'up'){
+                    if(nowSize === 7){
+                        // 7이 최댓값
+                    }else{
+                        value.textContent = (nowSize + 1).toString();
+                        textarea.style.lineHeight = (parseInt(currentLineSpace)*1.5) + 'px';
+                        textarea.style.height = (textarea.scrollHeight + 100)+'px';//박스 길이 수정용
+                    }
+                }
+            });
+        });
+
+        
+        //최근 본 목록에 자동으로 저장하기
+        function addRecentNovel(){
+            var nno = [[${dto.nno}]];
+            var eno = [[${dto.eno}]];
+            var enoNum = [[${dto.episodeNum}]];
+            var email = $("#username").val();
+
+            console.log(nno);
+            console.log(enoNum);
+            console.log(eno);
+            console.log(email);
+
+            if(email!=null){
+                var data = {nno:nno, lastEpisode:enoNum, lastEno:eno, email:email};
+
+                $.ajax({
+                    url:'/rest/recent/'+nno,
+                    type:"post",
+                    data:JSON.stringify(data),
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"text",
+                    success:function(result){
+                        // 페이지 방문 할때마다 1회 적용
+                    }    
+                })
+            }
+        }
+        addRecentNovel();
+
+    </script>
+</body>
+</html>

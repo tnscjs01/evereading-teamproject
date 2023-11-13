@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/faq/faq.css">
+
+    <div class="container" id="menu">
+        <div class="row">
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/notice') ? 'activeL' : ''}" th:href="@{/notice/list}">공지사항</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/faq') ? 'activeL' : ''}" th:href="@{/faq/list}">자주 묻는 질문</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/question') ? 'activeL' : ''}" th:href="@{/question/list}">1:1 문의</a>
+        </div>
+    </div>
+
+        <h1 class="m-3 text-center">자주 묻는 질문 작성</h1>
+
+        <form th:action="@{/faq/write}" th:method="post">
+
+            <div class="form-group m-3">
+                <label>제목</label>
+                <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요." required>
+            </div>
+
+            <div class="form-group m-3">
+                <label>내용</label>
+                <textarea class="form-control" rows="5" name="content" placeholder="내용을 입력하세요." required></textarea>
+            </div> 
+
+            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-primary">작성완료</button>
+            </div>
+
+        </form>
+
+    </th:block>
+
+</th:block>

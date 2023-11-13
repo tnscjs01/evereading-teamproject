@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "BestApplication",
+            "request": "launch",
+            "mainClass": "com.evereading.best.BestApplication",
+            "projectName": "teamproject-15"
+        },
+        {
+            "type": "java",
+            "name": "BestApplication",
+            "request": "launch",
+            "mainClass": "com.evereading.best.BestApplication",
+            "projectName": "teamproject-12"
+        },
+        {
+            "type": "java",
+            "name": "BestApplication",
+            "request": "launch",
+            "mainClass": "com.evereading.best.BestApplication",
+            "projectName": "teamproject"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BestApplication<best>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.evereading.best.BestApplication",
+            "projectName": "best",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+}
+
+#menu .row {
+    margin:50px 0px 0px 0px;
+    padding: 0px;
+    text-align: center;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    font-size: 25px;
+}
+
+#menu .activeL {
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+}
+
+#menu .row>a {
+    color: black;
+}
+
+#menu .row>a:not(.activeL) {
+    border-bottom: solid 1px black !important;
+    border-top: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+    border-right: solid 1px lightgray;
+}
+
+#accordionBox {
+    border-top: 1px solid gray;
+}
+
+#accordionFlushExample .bi {
+    font-size: 1.5rem;
+}
+
+#accordionFlushExample #mark {
+    opacity: 0.5;
+    width: 4%;
+}
+
+#answer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #35afbd;
+    border-color: #35afbd;
+  }
+
+.pagination a {
+    color: #35afbd;
+}

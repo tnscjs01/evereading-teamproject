@@ -1,0 +1,49 @@
+.topModify {
+    margin-top: 30px;
+    font-size: 30px;
+    width: 100%;
+    font-weight: 600;
+    font-family: 'Pretendard-Regular';
+    border-bottom: 2px solid #000;
+}
+.opsionbtn {
+    width: 100%;
+    line-height: 100px;
+    text-align: center;
+    margin-top: 20px;
+    word-spacing: 10px;
+}
+.editBtn {
+    width: 20% !important;
+    line-height: 40px;
+    height: 30%;
+    border-color: #34AFBC;
+    color: #34AFBC;
+    background-color: #fff;
+    font-size: 20px;
+    letter-spacing: 5px;
+    padding-left: 15px;
+}
+.editBtn:hover {
+    color: #fff;
+    background-color: #34AFBC;
+    font-weight: bolder;
+}
+.editForm {
+    margin-top: 30px;
+    width: 95%;
+    padding-left: 2%;
+}
+label {
+    font-size: 23px;
+    margin-top: 10px;
+    margin-bottom: 7px;
+}
+#titleLengthCheck {
+    color: #bbb;
+    float: right;
+}
+#textLengthCheck {
+    color: #bbb;
+    float: right;
+}

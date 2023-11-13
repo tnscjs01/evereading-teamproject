@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+/* ?? */
+.container, .intro{
+    font-family: 'Pretendard-Regular';
+}
+.coverImg{
+    width:200px;
+    height: 280px;
+    /* padding: 10px; */
+    /* border: solid 1px lightgray; */
+}
+.coverImg img{
+    border-radius: 10px;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-position: center;
+}
+.intro{
+    padding: 30px;
+    /* height: auto; */
+}
+.intro h1,.continue h3, .episode h3{
+    font-weight: bold;
+}
+.bookmark,.guestBtn{
+    position: relative;
+    right: 0px;
+}
+.imgBtn{
+    float:left;
+}
+.novelContent{
+    padding-left: 250px;
+}
+.first{
+    margin: 20px auto;
+    width: 100px;
+    display: block;
+}
+.continue{
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 30px;
+    border-bottom: solid 1px lightgray;
+}
+.continue h3{
+    text-align: left;
+}
+.continue a{
+    width: 10%;
+    float: right;
+}
+.episode{
+    margin: 20px;
+}
+.episode a{
+    color: black;
+}
+.episode table{
+    text-align: center;
+}
+.episode tbody span{
+    font-size: small;
+    color: #35afbd;
+}
+.pagination .page-item.active .page-link{
+  background-color: #35afbd;
+  border: solid 1px lightgray;
+}
+.pagination a{
+    color: #35afbd;
+}
+.write{
+    color: white !important;
+}
+.btns{
+    text-align: center !important;
+    margin: 10px;
+}
+.container h2{
+    text-align: center;
+}
+.form-group{
+    margin: 10px;
+}
+.addReply{
+    width: 100%;
+    margin-bottom: 20px;
+}
+tbody tr{
+    height: 55px;
+    vertical-align: middle;
+}
+.contentDiv{
+    min-height: 130px;
+}
+.epiContent>div{
+    margin: 20px 10px;
+}
+.epiContent textarea{
+    height: auto;
+}
+textarea{
+    resize: none;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/member/personalInfo.css}">
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        <div class="container w-75">
+            <div class="row mx-5 px-5 py-5">
+                <div class="col-3 menu">
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <p>[[${info.nickname}]]님은</p><br>
+                        <p sec:authorize="hasRole('ADMIN')"class="fw-bold">관리자 회원</p>
+                        <p>입니다</p>
+                    </div>
+                </div>
+                <div class="col-9 pt-5 px-5 d-flex info">
+                    <h4 class="w-100 pb-2">비밀번호인증</h4>
+                </div>
+
+                <div class="col-3 pt-4 menu">
+                    <p id="infoView"><i class="fa fa-user-o text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/infoView">
+                            회원정보수정
+                        </a>
+                    </p>
+                    <p id="pwCkView"><i class="fa fa-lock text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/pwModify">
+                            비밀번호 변경
+                        </a>
+                    </p>
+                    <p id="signout"><i class="fa fa-sign-out text-center pt-2 ps-1" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/signout">
+                            회원탈퇴
+                        </a>
+                    </p>
+                </div>
+                <div class="col-9 px-5 py-4 info" id="pwCheck">
+
+                    <form name="form" action="/member/pwCheck" method="post" >
+                        <input type="hidden" name="view" id="view" th:value="${view}">
+
+                        <div class="col text-center mb-4">
+                            <i id="logo" class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            <h4 class="mt-3">
+                                정보를 안전하게 보호하기 위해<br>
+                                <span class="text-danger">비밀번호를 다시 한 번 확인</span>합니다.
+                            </h4>
+                            <p class="text-secondary">비밀번호가 타인에게 노출되지 않도록 항상 주의해주세요.</p>
+                        </div>
+                        
+                        <div class="form-group row mb-2 ">
+                            <label class="col-4 ms-1">이메일</label>
+                            <input type="text" class="form-control col border-0" name="email" th:value="${info.email}" readonly>
+                        </div>
+
+                        <div class="form-group row mb-2">
+                            <label class="col-4 ms-1">비밀번호</label>
+                            <input type="password" class="form-control col mb-2 me-3" id="pw" >
+                        </div>
+
+                        <div class="form-group d-flex justify-content-end mt-4">
+                            <button class="btn btn-outline justify-content-end w-50" type="reset" >취소</button>
+                            <button class="btn justify-content-end btn-outline-default ms-2 w-50">확인</button>
+                        </div>
+                    </form>
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+
+            const pw = document.getElementById('pw');
+            const view = document.getElementById('view').value;
+            const infoView = document.getElementById('infoView');
+            const pwCkView = document.getElementById('pwCkView');
+            const signout = document.getElementById('signout');
+
+            let pwCheck;
+
+            if(view == 'info'){
+                infoView.className += ' on'
+            }else if(view == 'pwModify'){
+                pwCkView.className += ' on'
+            }else{
+                signout.className += ' on'
+            }
+
+            $(document).ready(function(e){
+                
+                $('.justify-content-end').click(function(){
+                    
+                    $.ajax({
+                        url:'/pwCheck/'+pw.value,
+                        type:"GET",
+                        contentType:"application/json; charset=utf-8",
+                        async: false,
+                        success:function(result){
+                            console.log(result);
+                            if(result == 0){
+                                pwCheck = null;
+                            }else{
+                                pwCheck = 1;
+                            }
+                            
+                        }
+                    });
+
+                    if(pw.value == ""){
+                        alert("비밀번호를 입력해주세요");
+                        pw.focus();
+                        return false;
+                    }
+                    if(pwCheck == null ){
+                        alert("비밀번호가 일치하지 않습니다.");
+                        pw.focus();
+                        return false;
+                    }
+                });
+            });
+
+
+        </script>
+    
+    </th:block>
+ 
+</th:block>

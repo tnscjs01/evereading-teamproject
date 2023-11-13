@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+.boardKategorie{
+    width: 100%;
+    height: 75px;
+    line-height: 65px;
+    font-size: 28px;
+    word-spacing: -10px;
+    margin-top: 20px;
+    text-align: center !important;
+}
+.bk {
+    text-align: center;
+    display: inline-block;
+    text-align: center !important;
+    border-left: solid 1px #000;
+    border: solid 1px #bbb;
+    width: 50%;
+}
+
+.bk a {
+    text-align: center !important;
+    color: black;
+    font-weight: 500;
+    font-family: 'Pretendard-Regular';
+}
+.btn {
+    color: #fff;
+    background-color: #34AFBC;
+}
+.btn:hover {
+    color: #fff;
+    background-color: #34AFBC;
+}
+#free {
+    height: 67px;
+    border-top-color: #000 !important;
+    border-left-color: #000 !important;
+    border-right-color: #000 !important;
+    border-bottom-color: #fff !important;
+}
+#review{
+    cursor:pointer;
+    border-bottom-color: #000 !important;
+}
+#tnb {
+    text-align: center;
+    border-bottom-color: #000 !important;
+    border-left-color: #000 !important;
+    border-right-color: #000 !important;
+}
+.cell {
+    cursor: pointer;
+}
+tr.cell:hover th{
+    background-color: #b5d9dd;
+}
+textarea {
+    resize: none;
+}
+#searchform {
+    display: inline-flex;
+}
+#search {
+    display: inline-block;
+    height: 42px;
+    width: 250px;
+    border-radius: 7px !important;
+    border: 1px solid #aaa;
+    padding-left: 10px;
+    font-weight: 600;
+}
+#searchBtn {
+    height: 42px;
+    display: inline-block;
+    margin-right: 20px;
+}
+#searchBtn:hover {
+    background-color: #159aa8;
+}
+.page-link {
+    color: #34AFBC;
+    font-weight: bold;
+}
+.page-link:hover {
+    color: #34AFBC;
+    font-weight: bold;
+}
+.writeBtn {
+    height: 42px;
+    width: 10%;
+    margin-right: 20px;
+    font-weight: 600;
+    word-spacing: 2px;
+}
+.writeBtn:hover {
+    background-color: #159aa8;
+}
+#textover {
+    height: 30px;
+}
+.titleLength {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 500px;
+    max-height: 30px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: -5px;
+    line-height: 14px;
+}
+.comment-Cnt {
+    color: #34AFBC;
+}

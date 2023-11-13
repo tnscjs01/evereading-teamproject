@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/library/library.css}">
+    <script type="text/javascript" th:src="@{/js/library/library.js}"></script>
+    <style>
+        .card{
+            box-shadow: 0px 0px 15px lightgray;
+        }
+    </style>
+    <!-- 내서재 메뉴 -->
+    <div class="container">
+        <div class="row">
+            <a class="col" th:href='@{/library/recent(email=${#authentication.principal.username})}'>최근작품</a>
+            <a class="col activeL" th:href="@{/library/bookmark(email=${#authentication.principal.username})}">관심작품</a>
+            <a class="col" th:href="@{/library/myNovel(email=${#authentication.principal.username})}">작가활동</a>
+        </div>
+    </div>
+    <!-- 관심작품 목록  -->
+    <div class="container">
+        <div class="card bookmark" th:each = "list : ${list.dtoList}">
+            <div class="btnClose" th:data-nno="${list.nno}">
+                <i class="fa-solid fa-square-xmark"></i>
+            </div>        
+            <div class="coverImg" >      
+                <a th:href="@{/episode/list(nno=${list.nno})}">
+                    <img th:if="${list.thumbnail!=null}" th:src="|/rest/display?fileName=${list.getImage()}|" alt="표지">
+                </a>
+                <h5 class="card-title">[[${list.title}]]</h5>
+                <p class="card-text" >[[${list.nickname}]]</p>
+            </div>
+            
+            <div class="card-body"  >
+                <!-- <h5 class="card-title">
+                    <a th:href="@{/episode/list(nno=${list.nno})}">[[${list.title}]]</a></h5>
+                <div class="card-text" >[[${list.nickname}]]</div> -->
+            </div>
+
+            
+        </div>
+    </div>
+    <div class="pageDiv" style="clear: both;">
+        <!-- 페이지네이션 -->
+        <ul class="pagination h-100 justify-content-center align-items-center" >
+            <li class="page-item " th:if="${list.prev}">
+                <a class="page-link" th:href="@{/library/bookmark(email=${#authentication.principal.username}, page= ${list.start -1})}" tabindex="-1">&lt;</a>
+            </li>
+
+            <li th:class=" 'page-item ' + ${list.page == page?'active':''} " th:each="page: ${list.pageList}">
+                <a class="page-link" th:href="@{/library/bookmark(email=${#authentication.principal.username}, page = ${page})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${list.next}">
+                <a class="page-link" th:href="@{/library/bookmark(email=${#authentication.principal.username}, page= ${list.end + 1})}">&gt;</a>
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(e){
+            //북마크 삭제
+            $('.btnClose').click(function(){
+                if(confirm("관심작품에서 삭제하시겠습니까?")){              
+                    var nno = $(this).data("nno"); //X버튼 누른 작품의 nno
+                    var data = {nno:nno};
+                    //삭제
+                    $.ajax({
+                        url:'/rest/bookmark/'+nno,
+                        type:"DELETE",
+                        data:JSON.stringify(data),
+                        contentType:"application/json; charset=utf-8",
+                        dataType:"text",
+                        success:function(result){
+                            self.location.reload();
+                        }
+                    })
+                }
+
+            });
+            $('.card').each(function(){
+                var nno = $(this).find('.btnClose').data("nno");
+                var cardBody = $(this).children('.card-body');
+                var str = "";
+                $.ajax({
+                    url:'/rest/count/'+nno,
+                    type:"GET",
+                    success:function(result){
+                        str += '<div style="margin-left:10px; color: #35afbd;"><i class="fa-regular fa-eye"></i> '+(result.viewCount!=null?result.viewCount:0);
+                        str += '  <i class="fa-solid fa-book-open" style="color: #35afbd; font-size:15px; margin-left:10px;">  '+(result.bookmarkCount!=null?result.bookmarkCount:0)+'</i></div> ';
+                        cardBody.append(str);
+                    }
+                })
+             
+            });
+        });
+    </script>
+
+</th:block> 
+</th:block>
+</html>

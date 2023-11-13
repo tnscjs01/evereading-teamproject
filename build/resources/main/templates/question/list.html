@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/question/question.css">
+
+    <div class="container" id="menu">
+        <div class="row">
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/notice') ? 'activeL' : ''}" th:href="@{/notice/list}">공지사항</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/faq') ? 'activeL' : ''}" th:href="@{/faq/list}">자주 묻는 질문</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/question') ? 'activeL' : ''}" th:href="@{/question/list}">1:1 문의</a>
+        </div>
+    </div>
+        
+        <div class="container">
+
+            <h3 class="m-3">1:1 문의</h3>
+
+            <table class="table table-hover">
+                <thead>
+                <tr class="table table-light">
+                    <th scope="col" class="text-center col-1" th:if="${#request.isUserInRole('ADMIN')}">번호</th>
+                    <th scope="col" class="text-center col-5">제목</th>
+                    <th scope="col" class="text-center col-1.5">작성자 닉네임</th>
+                    <th scope="col" class="text-center col-1.5">작성자 이메일</th>                                
+                    <th scope="col" class="text-center col-1.5">질문등록일</th>
+                    <th scope="col" class="text-center col-1.5">답변등록일</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    
+                <tr th:each="questionDto : ${result.dtoList}" > 
+                    <th scope="row" class="text-center" th:if="${#request.isUserInRole('ADMIN')}">
+                        [[${questionDto.qno}]]
+                    </th>
+                    <td>
+                        <a th:href="@{/question/read(qno = ${questionDto.qno}, page= ${result.page})}" id="listTitle">
+                            [[${questionDto.title}]]
+                        </a>
+                    </td>
+                    <td class="text-center">[[${questionDto.nickname}]]</td>
+                    <td class="text-center">[[${questionDto.email}]]</td>
+                    <td class="text-center" th:text="${#temporals.format(questionDto.regdate, 'yyyy/MM/dd')}"></td>                    
+                    <td class="text-center" th:text="${#temporals.format(questionDto.ansdate, 'yyyy/MM/dd')}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-end">
+                <a th:href="@{/question/write}" th:if="${#request.isUserInRole('USER')}">
+                    <button type="button" class="btn btn-outline-primary">질문하기</button>
+                </a>
+            </div>
+
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item " th:if="${result.prev}">
+                    <a class="page-link" th:href="@{/question/list(page= ${result.start -1})}" tabindex="-1">Prev</a>
+                </li>
+
+                <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{/question/list(page = ${page})}">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{/question/list(page= ${result.end + 1})}">Next</a>
+                </li>
+
+            </ul>
+     
+
+        </div>
+
+        <script th:inline="javascript">
+
+            $(document).ready(function () {
+
+                var msgType = [[${msgType}]];
+                var msg = [[${msg}]];
+                var writer = [[${writer}]];
+
+                if (msgType === 'write') {
+                    if (confirm('1:1 문의가 등록되었습니다.')) {
+                        window.location.href = '/question/list';
+                    } else {
+                        window.location.href = '/question/list';
+                    }
+                } else if (msgType === 'delete') {
+                    if (confirm(writer + '의 1:1 문의가 삭제되었습니다.')) {
+                        window.location.href = '/question/list';
+                    } else {
+                        window.location.href = '/question/list';
+                    }
+                }
+            });
+        </script>
+
+    </th:block>
+
+</th:block>

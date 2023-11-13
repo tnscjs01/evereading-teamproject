@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/event/event.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+        <h1 class="m-3 text-center">이벤트 작성</h1>
+
+        <form th:action="@{/event/register}" th:method="post" enctype="multipart/form-data">
+
+            <div class="form-group m-3">
+                <label>제목</label>
+                <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요." required>
+            </div>
+
+            <div class="form-group m-3">
+                <label>내용</label>
+                <textarea class="form-control" rows="5" name="content" placeholder="내용을 입력하세요." required></textarea>
+            </div>            
+            
+            <div class="form-group m-3">
+                <label>캐러셀 이미지 업로드</label><br>
+                <input type="file" class="form-control-file" id="carouselImageInput" name="carouselImageFile" onchange="previewCarouselImage()">
+            </div>
+            
+            <div class="form-group m-3">
+                <label>이벤트 이미지 업로드</label><br>
+                <input type="file" class="form-control-file" id="eventImageInput" name="eventImageFile" onchange="previewEventImage()">
+            </div>
+            
+            <div class="container" id="uploadImgBox">
+                <div class="row justify-content-center">
+
+                    <div class="col-4 text-center p-4 m-2" id="borderBox1" style="display: none">
+
+                        <div>
+                            <h5 class="mb-3">캐러셀 이미지</h5>
+                        </div>
+
+                        <div class="image-container">
+                            <img class="img-fluid" id="carouselImagePreview" src="#" alt="Carousel Image Preview" style="display: none; max-width: 300px; max-height: 200px;">
+                            <button id="deleteCarouselButton" class="delete-button" style="display: none" onclick="deleteImage('carouselImagePreview')">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>    
+                        </div>
+
+                    </div>
+
+                    <div class="col-4 text-center p-4 m-2" id="borderBox2" style="display: none">
+                        
+                        <div>
+                            <h5 class="mb-3">이벤트 이미지</h5>
+                        </div>
+
+                        <div class="image-container">
+                            <img class="img-fluid" id="eventImagePreview" src="#" alt="Event Image Preview" style="display: none; max-width: 300px; max-height: 200px;">
+                            <button id="deleteEventButton" class="delete-button" style="display: none" onclick="deleteImage('eventImagePreview')">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-primary">작성완료</button>
+            </div>
+
+        </form>
+
+        <script>
+
+            function previewCarouselImage() {
+
+                var carouselImageInput = document.getElementById("carouselImageInput");
+                var carouselImagePreview = document.getElementById("carouselImagePreview");
+                var deleteCarouselButton = document.getElementById("deleteCarouselButton");
+                var borderBox1 = document.getElementById("borderBox1");
+                var file = carouselImageInput.files[0];
+                var reader = new FileReader();
+        
+                reader.onload = function(e) {
+                    borderBox1.style.display = "block";
+                    carouselImagePreview.style.display = "block";
+                    carouselImagePreview.src = e.target.result;
+                    deleteCarouselButton.style.display = "block";                    
+                    carouselImagePreview.style.margin = "auto";
+                };
+        
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            }
+        
+            function previewEventImage() {
+
+                var eventImageInput = document.getElementById("eventImageInput");
+                var eventImagePreview = document.getElementById("eventImagePreview");
+                var deleteEventButton = document.getElementById("deleteEventButton");
+                var borderBox2 = document.getElementById("borderBox2");
+                var file = eventImageInput.files[0];
+                var reader = new FileReader();
+        
+                reader.onload = function(e) {
+
+                    borderBox2.style.display = "block";
+                    eventImagePreview.style.display = "block";
+                    eventImagePreview.src = e.target.result;
+                    deleteEventButton.style.display = "block";                    
+                    eventImagePreview.style.margin = "auto";
+
+                };
+        
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function deleteImage(imageId) {
+
+                var imageElement = document.getElementById(imageId);
+
+                if (imageElement) {
+                    imageElement.style.display = "none";
+                }
+
+                if (imageId === "carouselImagePreview") {
+
+                    var deleteCarouselButton = document.getElementById("deleteCarouselButton");
+                    var borderBox1 = document.getElementById("borderBox1");
+                    var imageInput = document.getElementById("carouselImageInput");
+
+                    if (deleteCarouselButton) {
+                        deleteCarouselButton.style.display = "none";
+                        borderBox1.style.display = "none";
+                    }
+
+                    if (imageInput) {
+                        imageInput.value = "";
+                    }
+
+                    var newFileReader = new FileReader();
+                    var newImageInput = document.getElementById("carouselImageInput");
+
+                    newFileReader.onload = function (e) {
+
+                        var carouselImagePreview = document.getElementById("carouselImagePreview");
+
+                        carouselImagePreview.style.display = "block";
+                        carouselImagePreview.src = e.target.result;
+
+                    };
+
+                    if (newImageInput.files.length > 0) {
+                        newFileReader.readAsDataURL(newImageInput.files[0]);
+                    }
+                }
+
+                if (imageId === "eventImagePreview") {
+
+                    var deleteEventButton = document.getElementById("deleteEventButton");
+                    var borderBox2 = document.getElementById("borderBox2");
+                    var eventImageInput = document.getElementById("eventImageInput");
+
+                    if (deleteEventButton) {
+                        deleteEventButton.style.display = "none";
+                        borderBox2.style.display = "none";
+                    }
+
+                    if (eventImageInput) {
+                        eventImageInput.value = "";
+                    }
+
+                    var newFileReader = new FileReader();
+                    var newImageInput = document.getElementById("eventImageInput");
+
+                    newFileReader.onload = function (e) {
+
+                        var eventImagePreview = document.getElementById("eventImagePreview");
+                        eventImagePreview.style.display = "block";
+                        eventImagePreview.src = e.target.result;
+                        
+                    };
+
+                    if (newImageInput.files.length > 0) {
+                        newFileReader.readAsDataURL(newImageInput.files[0]);
+                    }
+                }
+
+                event.preventDefault(); // 기본 폼 제출 동작을 막습니다.
+            }
+
+        </script>
+
+    </th:block>
+
+</th:block>

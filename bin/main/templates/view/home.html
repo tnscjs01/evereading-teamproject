@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+        
+        <h4>장새연님</h4>
+        <a href="http://localhost:8888/episode/list">소설상세페이지 *novel데이터 없으면 이동불가</a><br>
+        <a href="http://localhost:8888/library">내서재</a><br><br>
+        
+        <h4>박새연님</h4>
+        <a href="http://localhost:8888/security/login">로그인/회원가입</a><br>
+        <a href="http://localhost:8888/security/memberList">관리자 권한 부여하기</a><br>
+        <a href="http://localhost:8888/member/personalInfo">회원 정보 수정화면/탈퇴</a><br><br>
+        <h4>유현준님</h4>
+        <a href="http://localhost:8888/free/list">자유/리뷰</a><br><br>
+        <h4>권순천님</h4>
+        <br>
+        <a href="http://localhost:8888/home"><h1>메인 홈페이지</h1></a><br>
+        <a href="http://localhost:8888/notice/list">공지사항 등 고객센터</a><br>
+        <a href="http://localhost:8888/novel/temporary">임시 소설 목록 페이지</a><br>
+        <a href="http://localhost:8888/event/list">이벤트 관리 페이지</a><br>
+    </th:block>
+
+</th:block>

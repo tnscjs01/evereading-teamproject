@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/notice/notice.css">
+
+    <div class="container" id="menu">
+        <div class="row">
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/notice') ? 'activeL' : ''}" th:href="@{/notice/list}">공지사항</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/faq') ? 'activeL' : ''}" th:href="@{/faq/list}">자주 묻는 질문</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/question') ? 'activeL' : ''}" th:href="@{/question/list}">1:1 문의</a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <h3 class="m-3">공지사항</h3>
+
+        <div id="titleBox" class="pt-3 pb-3">
+            <h4 id="title">[[${noticeDto.title}]]</h4>
+            <span id="regdate">[[${#temporals.format(noticeDto.regdate, 'yyyy-MM-dd hh:mm:ss')}]]</span>
+        </div>
+
+        <div class="content">
+            <p>[[${noticeDto.content}]]</p>
+        </div>        
+    
+    </div>
+
+    <div class="d-grid gap-2 d-flex justify-content-center mt-3 row" id="btnBox">
+
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <a th:href="@{/notice/modify(nono = ${noticeDto.nono}, page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-outline-primary btn-lg">수정</button>
+            </a>
+        </div>
+        
+        <div class="col-2" th:if="${#request.isUserInRole('ADMIN')}">
+            <form id="deleteForm" action="/notice/delete" method="post">
+                <input type="hidden" name="nono" th:value="${noticeDto.nono}">
+                <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                <button type="button" class="btn btn-outline-danger btn-lg" onclick="confirmDelete()">삭제</button>
+            </form>
+        </div>
+
+        <div class="col-2">
+            <a th:href="@{/notice/list(page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-lg listBtn">목록</button>
+            </a>
+        </div>
+        
+    </div>
+
+    <script>
+
+        function confirmDelete() {
+
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                document.getElementById("deleteForm").submit();
+            }
+
+        }
+    </script>
+
+    </th:block>
+
+</th:block>

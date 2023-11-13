@@ -1,0 +1,212 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+}
+
+#menu .row{
+    margin:50px 0px 0px 0px;
+    padding: 0px;
+    text-align: center;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    font-size: 25px;
+}
+
+.activeL{
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+}
+
+#menu .row>a {
+    color: black;
+}
+
+#menu .row>a:not(.activeL) {
+    border-bottom: solid 1px black !important;
+    border-top: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+    border-right: solid 1px lightgray;
+}
+
+#periodBtn {
+    padding-left: 50px;
+}
+
+#periodBtn .btn {
+    background-color: white;
+    border-color: #35afbd;
+    color:#35afbd;
+}
+
+#periodBtn .btn:hover {
+    background-color: #35afbd;
+    border-color: #35afbd;
+    color:white;
+}
+
+#periodBtn .active {
+    background-color: #35afbd;
+    border-color: #35afbd;
+    color:white;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #35afbd;
+    border-color: #35afbd;
+}
+
+.pagination a {
+    color: #35afbd;
+}
+
+#mainNovels .col {
+    margin: 0px;
+    padding: 0px;    
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+#mainNovels .card {            
+    width: 12rem;
+    height: 16rem;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;    
+    box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+}
+
+#mainNovels .card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9));
+    z-index: 1;
+    pointer-events: none;
+}
+
+#mainNovels img {    
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+    transition: opacity .2s ease-out;
+    object-position: center;
+}
+
+
+#mainNovels img:hover {
+    transition: opacity .3s ease-in;
+    opacity: 1;
+}
+
+#mainNovels h3 {
+    font-family: 'Pretendard-Regular';
+    font-weight: bold;    
+}
+
+#mainNovels #ranking {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 2.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    position: relative; 
+}
+
+#mainNovels #ranking h1 {
+    font-family: 'Pretendard-Regular';
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 92%; 
+    left: 0;
+    right: 0;
+}
+
+#mainNovels h5 {
+    position: absolute;    
+    left: 5%;
+    bottom: 10%;
+    margin: 0;
+    width: 90%;    
+    color: white;
+    font-weight: bold;
+    z-index: 2;
+    pointer-events: none;    
+}
+
+#mainNovels p {
+    position: absolute;
+    margin: 0;
+    left: 5%;
+    bottom: 1%;
+    width: 90%;
+    color: white;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#mainNovels span {
+    top: 5%;
+    left: 5%;
+    pointer-events: none;
+}
+
+#newandup {
+    top: 3%;
+    left: 5%;
+    position:absolute;
+    pointer-events: none;
+}
+
+#uploadImgBox .col-4{
+    border: 1px solid lightgray;
+    border-radius: 20px;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image-container img {
+    pointer-events: none;
+}
+
+.delete-button {
+    position: absolute;
+    color: #35afbd;
+    font-size: 30px; 
+    cursor: pointer;
+    padding: 0px;
+    right: 5px;
+    top: -4px;
+    opacity: 60%;
+    background: none;
+    border: none;
+}
+
+.delete-button:hover {
+    opacity: 90%;
+}

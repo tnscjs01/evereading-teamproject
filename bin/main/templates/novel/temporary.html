@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/novel/novel.css">
+    <script type="text/javascript" th:src="@{/js/novel/fantasy.js}"></script>
+    
+    <div class="container">
+        <h1 class="m-3 text-center">소설 목록</h1>
+
+        <form th:action="@{/novel/search}" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="제목과 작가명을 입력하세요" name="keyword">
+                <button class="btn btn-outline-secondary" type="submit">임시 검색</button>
+            </div>
+        </form>        
+
+        <!--임시 작품 등록 버튼-->
+        <div class="d-grid gap-2 d-md-flex justify-content-end">
+            <a th:href="@{/novel/register}">
+                <button type="button" class="btn btn-outline-primary">임시 작품 등록</button>
+            </a>
+        </div>
+        
+        <table class="table table-hover">
+            <thead>
+                <tr class="custom-table">
+                    <th scope="col" class="text-center col-1">번호</th>
+                    <th scope="col" class="text-center col-1">장르</th>
+                    <th scope="col" class="text-center col-7">제목</th>
+                    <th scope="col" class="text-center col-2">작가</th>
+                    <th scope="col" class="text-center col-1">등록일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="novelDto : ${result.dtoList}">
+                    <th scope="row" class="text-center" th:text="${novelDto.nno}"></th>
+                    <td class="text-center" th:text="${novelDto.category}"></td>
+                    <td>
+                        <a th:href="@{/episode/list(nno=${novelDto.nno})}" th:text="${novelDto.title}"></a>
+
+                        <!-- 이미지 출력 부분 -->
+                        <div class="container" style="max-width: 200px;">
+                            <img class="img-fluid" th:src="@{/thumbnail/{thumbnail}(thumbnail=${novelDto.thumbnail})}" alt="Novel Image">                        
+                        </div>
+                        <!--임시 수정 버튼-->
+                        <div class="d-grid gap-2 d-md-flex justify-content-end">
+                            <a th:href="@{/novel/modify(nno = ${novelDto.nno}, page=${pageRequestDTO.page})}">
+                                <button type="button" class="btn btn-outline-primary">임시 수정 버튼</button>
+                            </a>
+                        </div>
+
+                        <!--임시 삭제 버튼-->
+                        <form id="deleteForm" action="/novel/delete" method="post" style="display: inline;" class="d-grid gap-2 d-md-flex justify-content-end">
+                            <input type="hidden" name="nno" th:value="${novelDto.nno}">
+                            <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete()">임시 삭제 버튼</button>
+                        </form>
+
+                    </td>                                        
+                    <td class="text-center" th:text="${novelDto.nickname}"></td>
+                    <td class="text-center" th:text="${#temporals.format(novelDto.regdate, 'yyyy/MM/dd')}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 검색 키워드가 있을 경우 -->
+        <th:block th:if="${keyword != null and not #strings.isEmpty(keyword)}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:if="${result.prev}">
+                    <a class="page-link" th:href="@{/novel/search(page=${result.start - 1}, keyword=${keyword})}" tabindex="-1">Prev</a>
+                </li>
+                <li th:class="'page-item ' + ${result.page == page ? 'active' : ''}" th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{/novel/search(page=${page}, keyword=${keyword})}" th:text="${page}">1</a>
+                </li>
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{/novel/search(page=${result.end + 1}, keyword=${keyword})}">Next</a>
+                </li>
+            </ul>
+        </th:block>
+
+        <!-- 검색 키워드가 없을 경우 -->
+        <th:block th:unless="${keyword != null and not #strings.isEmpty(keyword)}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:if="${result.prev}">
+                    <a class="page-link" th:href="@{/novel/temporary(page=${result.start - 1})}" tabindex="-1">Prev</a>
+                </li>
+                <li th:class="'page-item ' + ${result.page == page ? 'active' : ''}" th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{/novel/temporary(page=${page})}" th:text="${page}">1</a>
+                </li>
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{/novel/temporary(page=${result.end + 1})}">Next</a>
+                </li>
+            </ul>
+        </th:block>
+
+    </div>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var msgType = [[${msgType}]];
+            var msg = [[${msg}]];
+
+            if (msgType === 'register') {
+                if (confirm('등록되었습니다.')) {
+                    window.location.href = '/novel/list';
+                } else {
+                    window.location.href = '/novel/list';
+                }
+            } else if (msgType === 'delete') {
+                if (confirm('삭제되었습니다.')) {
+                    window.location.href = '/novel/list';
+                } else {
+                    window.location.href = '/novel/list';
+                }
+            }
+        });
+
+        function confirmDelete() {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    document.getElementById("deleteForm").submit();
+                }
+        }
+
+    </script>
+    </th:block>
+</th:block>
+</html>

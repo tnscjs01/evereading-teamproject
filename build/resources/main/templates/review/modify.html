@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/review/review.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/review/modify.css}">
+    <script th:src="@{/js/review/review.js}" type="text/javascript"></script>
+
+    <div class="boardKategorie">
+        <div id="free" class="bk" OnClick="location.href ='/free/list'">
+            <a href="/free/list" style="color: black !important;">자유</a>
+        </div>
+        <div id="review" class="bk" OnClick="location.href ='/review/list'">
+            <a href="/review/list">리뷰</a>
+        </div>
+    </div>
+    <div class="topModify">
+        글수정
+    </div>
+    <form class="editForm" th:action="@{/review/modify/{rvno}(rvno = ${vo.rvno})}" th:method="post">
+        <div class="form-group">
+            <label>장르</label>
+            <select class="form-select" name="category" th:value="${vo.category}">         
+                <option th:selected="${vo.category} == '판타지'">판타지</option>
+                <option th:selected="${vo.category} == '무협'">무협</option>
+                <option th:selected="${vo.category} == '현대'">현대</option>
+                <option th:selected="${vo.category} == '로맨스'">로맨스</option>
+                <option th:selected="${vo.category} == '기타'">기타</option>
+            </select>
+        </div>
+        <input type="hidden" name="rvno" th:value="${vo.rvno}">
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" id="title" class="form-control" name="title" th:value="${vo.title}">
+            <span id="titleLengthCheck">0자/50자</span>
+        </div>
+        <div class="form-group">
+            <label>내용</label>
+            <textarea rows="15" id="content" name="content" class="form-control" th:text="${vo.content}"></textarea>
+            <span id="textLengthCheck">0자/5000자</span>
+        </div>
+        <div class="form-group">
+            <input type="hidden" class="form-control" readonly name="email" th:value="${vo.email.nickname}" >
+        </div>
+        <div class="opsionbtn">
+            <button type="submit" class="btn btn-secondary btn-sm editBtn submitBtn" onclick="location.href='/review/modify?rvno=${vo.rvno}'">등록</button>
+            <button type="button" class="btn btn-secondary btn-sm editBtn" onclick="location.href='/review/list'">목록</button>
+        </div>
+    </form>
+    <script>
+        $(document).ready(function(e){
+            // textarea 글자수 카운팅
+            $("#content").keyup(function(e){
+                let content = $(this).val();
+                $("#textLengthCheck").text("(" + content.length + "자" + " / 5000자)");
+                if (content.length > 5000) {
+                        alert("최대 5000자까지 입력 가능합니다.");
+                        $(this).val(content.substring(0, 2000));
+                        $('#textLengthCheck').text("(5000자/5000자)");
+                }
+            });
+            // input 글자수 카운팅
+            $("#title").keyup(function(e){
+                let title = $(this).val();
+                $("#titleLengthCheck").text("(" + title.length + "자" + " / 50자)");
+                if (title.length > 50) {
+                        alert("최대 50자까지 입력 가능합니다.");
+                        $(this).val(title.substring(0, 50));
+                        $('#titleLengthCheck').text("(50자/50자)");
+                }
+            });
+            // textarea 자동 높이 변환
+            $('textarea').on( 'keyup', function (e){
+                $(this).css('height', 'auto');
+                $(this).height(this.scrollHeight);
+            });
+            $('textarea').keyup();
+        });
+    </script>
+    </th:block>
+</th:block>
+
+</html>

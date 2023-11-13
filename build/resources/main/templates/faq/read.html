@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/faq/faq.css">
+
+    <div class="container" id="menu">
+        <div class="row">
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/notice') ? 'activeL' : ''}" th:href="@{/notice/list}">공지사항</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/faq') ? 'activeL' : ''}" th:href="@{/faq/list}">자주 묻는 질문</a>
+            <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/question') ? 'activeL' : ''}" th:href="@{/question/list}">1:1 문의</a>
+        </div>
+    </div>
+
+        <h1 class="m-3 text-center">자주 묻는 질문 내용</h1>
+
+        <div class="form-group m-3">
+            <label>번호</label>
+            <input type="text" class="form-control" name="faqno" th:value="${faqDto.faqno}" readonly>
+        </div>
+
+        <div class="form-group m-3">
+            <label>제목</label>
+            <input type="text" class="form-control" name="title" th:value="${faqDto.title}" readonly>
+        </div>
+
+        <div class="form-group m-3">
+            <label>내용</label>
+            <textarea class="form-control" rows="5" name="content" readonly>[[${faqDto.content}]]</textarea>
+        </div>        
+        <div class="form-group m-3">
+            <label>등록일</label>
+            <input type="text" class="form-control" name="regdate" th:value="${#temporals.format(faqDto.regdate, 'yyyy/MM/dd')}" readonly>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-end">
+
+            <a th:href="@{/faq/modify(faqno = ${faqDto.faqno}, page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-outline-primary">수정</button>
+            </a>
+
+            <form id="deleteForm" action="/faq/delete" method="post" style="display: inline;">
+                <input type="hidden" name="faqno" th:value="${faqDto.faqno}">
+                <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                <button type="button" class="btn btn-outline-danger" onclick="confirmDelete()">삭제</button>
+            </form>
+    
+            <a th:href="@{/faq/list(page=${pageRequestDTO.page})}">
+                <button type="button" class="btn btn-outline-dark">목록</button>
+            </a>
+
+        </div>
+
+        <script>
+
+            function confirmDelete() {
+
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    document.getElementById("deleteForm").submit();
+                }
+
+            }
+
+        </script>        
+
+    </th:block>
+
+</th:block>

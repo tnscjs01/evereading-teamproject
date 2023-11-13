@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+        <th:block th:fragment="content">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/episode/episode.css}">
+        <style>
+            tbody .title{
+                white-space: nowrap;  
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .intro{
+                height: auto;
+                overflow: hidden;
+            }
+            .novelContent a{
+                color: #35afbd;
+            }
+            .continue h3{
+                float: left;
+            }
+            .continue p{
+                line-height: 40px;
+            }
+            .cell{
+                cursor: pointer;
+            }
+            .cell:hover td{
+                background-color: #35afbd7e;
+            }
+            .editBtn span{
+                z-index: 100;
+                /* border: solid 1px; */
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+            }
+            .editBtn span:hover{
+                color: black;
+            }
+            .intro textarea{
+                height: auto;
+                width: 100%;
+                font-size: 20px;
+                border: none;
+                background-color: white;
+                overflow: hidden;
+            }
+        </style>
+    <div class="container">
+        <!-- 작품 소개--------- -->
+        <div class="border intro">
+            <!-- 로그인 O -->
+            <div sec:authorize="isAuthenticated()">
+                <button th:class="'btn btn-outline-default bookmark float-end ' + ${bookmarkCheck?'active':''} ">
+                    [[${bookmarkCheck?"북마크 중":"북마크"}]]
+                </button>
+            </div>
+            <!-- 로그인X -> 로그인페이지로 이동 -->
+            <div sec:authorize="!isAuthenticated()">
+                <button class="btn btn-outline-default guestBtn float-end">
+                    북마크
+                </button>
+            </div>
+            
+            <div class="imgBtn">
+                <div class="coverImg">
+                    <img class="img-fluid"if:src="${novel.thumbnail!=null}" th:src="|/rest/display?fileName=${novel.getImageUrl()}|" alt="표지">
+                </div>
+                <a th:if="${first}" th:href="@{/episode/viewer(nno=${novel.nno}, eno=${first})}" class="btn btn-outline-default first">첫회 보기</a>
+            </div>
+            <div class="novelContent">
+                <p>장르><a href="#" class="link">[[${novel.category}]]</a></p>
+                <h1>[[${novel.title}]]</h1>
+                <p>총 [[${totalEpisode}]] 화 / [[${novel.completed?"완결":"미완결"}]]</p>
+                <p style="color: #35afbd;"><i class="fa-regular fa-eye"></i>  [[${totalCount!=null?totalCount:0}]]</i>&nbsp;
+                    <i class="fa-solid fa-book-open" style="color: #35afbd;"> [[${bookmarkCount!=null?bookmarkCount:0}]]</i></p>
+                <p>작가 : [[${novel.nickname}]]</p>
+                <hr>
+                <textarea disabled>[[${novel.content}]]</textarea>
+            </div>
+        </div>
+        <!-- 작품소개end. -->
+
+        <!-- 로그인 후 최근 본 회차 존재해야지만 나타남 -->
+        <div sec:authorize="isAuthenticated()" class="container continue" th:if="${recent!=null}">
+            <h3>최근 본 회차</h3>
+            <p>[[${recent.lastEpisode}]]화  <spen class="epiTitle" th:data-eno="${recent.lastEno}"></spen>
+                <a th:href="@{/episode/viewer(nno=${novel.nno}, eno=${recent.lastEno})}" class="btn btn-outline-default">이어보기</a></p>
+        </div>
+
+
+
+        <!-- 작품회차 --------------->
+        <div class="episode">
+            <h3>소설 회차</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th width="50%">제목</th>
+                        <th sec:authorize="isAuthenticated()" th:if="${#authentication.principal.username == novel.email}"></th>
+                        <th>날짜</th>
+                        <th>조회수</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="cell" th:each="dto : ${result.dtoList}" th:onclick="|location.href ='@{/episode/viewer(nno=${dto.nno},eno=${dto.eno})}'|">
+                        <td>[[${dto.episodeNum}]]</td>
+                        <td style="text-align: left;" class="title">[[${dto.title}]]</a>
+                            <span th:text="${dto.replyCount==0?'':'['+dto.replyCount+']'}"></span>
+                        </td>
+                        <td sec:authorize="isAuthenticated()" th:if="${#authentication.principal.username == novel.email}" class="editBtn" th:data-nno="${dto.nno}" th:data-eno="${dto.eno}">
+                            <span class="modifyBtn">수정</span>
+                            <span class="deleteBtn">삭제</span>
+                        </td>
+                        <td>[[${#temporals.format(dto.regdate, 'yyyy/MM/dd')}]]</td>
+                        <td>[[${dto.count}]]</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <!-- 로그인 한 경우에만 email 비교=> 소설쓰기 버튼 노출 -->
+                <div sec:authorize="isAuthenticated()">
+                    <div th:if="${#authentication.principal.username == novel.email}">
+                        <a th:href="@{/episode/register(nno=${novel.nno})}" class="btn btn-outline-default float-end" style="color: white;">소설쓰기</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 페이징 ------------------------>
+            <ul class="pagination h-100 justify-content-center align-items-center">
+                <li class="page-item " th:if="${result.prev}">
+                    <a class="page-link" th:href="@{/episode/list(nno=${novel.nno}, page= ${result.start -1})}" tabindex="-1">Previous</a>
+                </li>
+    
+                <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
+                    <a class="page-link" th:href="@{/episode/list(nno=${novel.nno}, page = ${page})}">
+                        [[${page}]]
+                    </a>
+                </li>
+    
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link" th:href="@{/episode/list(nno=${novel.nno},page= ${result.end + 1})}">Next</a>
+                </li>
+            </ul>
+
+        </div>
+        <!-- 작품회차 end. -->
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        var nno = [[${novel.nno}]];
+
+        //북마크 버튼 클릭
+        $('.bookmark').click(function(){
+            var data = {nno:nno};
+
+            if($(this).hasClass('active')){ //북마크 중일때
+
+                //삭제
+                $.ajax({
+                    url:'/rest/bookmark/'+nno,
+                    type:"DELETE",
+                    data:JSON.stringify(data),
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"text",
+                    success:function(result){
+                        self.location.reload();
+                    }
+                })
+
+            }else{ //북마크 안되어있을때
+                //저장
+                $.ajax({
+                    url:'/rest/bookmark/'+nno,
+                    type:"POST",
+                    data:JSON.stringify(data),
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"text",
+                    success:function(result){
+                        self.location.reload();
+                    }
+                })
+            }
+            
+        });
+        
+        //비로그인 북마크 클릭 시
+        let guestBtn = document.querySelector('.guestBtn');
+        if(guestBtn){
+            guestBtn.addEventListener("click",function(){
+                let result = confirm('로그인 후 이용 가능합니다.');
+                if(result){
+                    location.replace("../security/login")
+                }else{
+
+                }
+            })
+        }
+
+        var lastEno = $('.epiTitle').data("eno");
+        
+        //마지막으로 본 에피소드 제목 출력
+        if(lastEno){
+            findLastEpisodeTitle();
+            
+        }        
+        function findLastEpisodeTitle(){
+            // var lastEno = $('.epiTitle').data("eno");
+            
+            if(lastEno!=null){
+                $.ajax({
+                    url:'/rest/episode/'+lastEno,
+                    type:"GET",
+                    success:function(result){
+                        $('.epiTitle').text(result);
+                        
+                    }
+                })
+            }
+        }
+
+        //장르 클릭 시
+        const link = document.querySelector('.link');
+        link.addEventListener('click',function(event){
+            console.log(link.textContent);
+            console.log(link);
+            switch(link.textContent){
+                case '판타지':
+                    window.location.href = '/novel/fantasy';
+                    break;
+                case '무협':
+                    window.location.href = '/novel/martialArts';
+                    break;
+                case '현대':
+                    window.location.href = '/novel/modern';
+                    break;
+                case '로맨스':
+                    window.location.href = '/novel/romance';
+                    break;
+                case '기타':
+                    window.location.href = '/novel/other';
+                    break;
+            }
+        });
+
+        //동적은 문제가 생겨서 정적으로 동작..
+        const intro = document.querySelector('.intro');
+        const content = document.querySelector('.intro textarea');
+        content.style.height = (content.scrollHeight) + 'px';
+        intro.style.height = (intro.scrollHeight + 30) + 'px';
+
+
+
+        const modifyBtn = document.querySelectorAll('.modifyBtn');
+        const deleteBtn = document.querySelectorAll('.deleteBtn');
+
+        modifyBtn.forEach(function(e){
+            e.addEventListener('click',function(){
+            const eno = this.parentElement.getAttribute('data-eno');
+            const nno = this.parentElement.getAttribute('data-nno');
+            window.location.href = '/episode/modify?nno='+nno+'&eno='+eno;
+            event.stopPropagation();
+            });
+        });
+
+        deleteBtn.forEach(function(e){
+            e.addEventListener('click',function(){
+                const eno = this.parentElement.getAttribute('data-eno');
+                const nno = this.parentElement.getAttribute('data-nno');
+                if(confirm('정말 삭제하시겠습니까?')){
+                    alert('삭제했습니다.');
+                    window.location.href = '/episode/delete?nno='+nno+'&eno='+eno;
+                }else{
+                    alert('취소하였습니다.');
+                }
+                event.stopPropagation();
+            });
+        });
+
+
+    });
+</script>
+
+
+     </th:block> 
+    </th:block>
+</html>

@@ -1,0 +1,155 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+*{
+    font-family: 'Pretendard-Regular';
+}
+
+.row{
+    margin:50px 0px 0px 0px;
+    padding: 0px;
+    text-align: center;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    font-size: 25px;
+}
+.activeL{
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+}
+.row>a{
+    color: black;
+}
+.row>a:not(.activeL){
+    border-bottom: solid 1px black !important;
+    border-top: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+    border-right: solid 1px lightgray;
+}
+
+
+.card{
+    width: 12rem;  
+    float: left;
+    overflow: hidden;
+    margin:13px;
+}
+.coverImg{
+    width: 12rem;
+}
+.coverImg img{
+    object-fit: cover;
+    width: 12rem;
+    height: 16rem;
+    object-position: center;
+}
+.recent{
+    height: 320px;
+}
+.bookmark{
+    height: 290px;
+}
+.myNovel{
+    height: 340px;
+}
+
+/* .card-title a{
+    font-weight: bold;
+    color: black;
+} */
+.card-text{
+    margin: 0px;
+    color: gray;
+    padding-left: 10px;
+}
+.card-text p{
+    margin-bottom:5px;
+}
+/* .card-title{
+    padding-top: 10px;
+    padding-left: 10px;
+    overflow-y: hidden; */
+    /* 2줄로 나오게 하려면 55px */
+    /* height: 35px;
+} */
+.card-body{
+    height: 120px;
+    overflow: hidden;
+    margin: 0px; padding: 5px;
+}
+
+.pagination .page-item.active .page-link{
+    background-color: #35afbd;
+    border-style: none;
+  }
+.pagination a{
+    color: #35afbd;
+}
+
+.btnClose{
+    position: absolute;
+    color: #35afbd;
+    font-size: 30px; 
+    cursor: pointer;
+    padding: 0px;
+    right: 5px;
+    top: -4px;
+    opacity: 60%;
+    z-index: 3;
+}
+.btnClose:hover{
+    opacity: 90%;
+}
+
+.novelBtn{
+    /* float: right; */
+    /* height: 100px; */
+    margin-bottom: 10px;
+    height: 30px;
+}
+.novelBtn a{
+    float: right;
+}
+
+        .coverImg{
+            position: relative;
+        }
+        .card::after{
+            content: "";
+            position: absolute;
+            background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9));
+            width: 100%;
+            height: 16rem;
+            cursor: pointer;
+            box-shadow: 0 5px 10px gray;
+            pointer-events: none;
+        }
+        .card-title{
+            position: absolute;    
+            left: 5%;
+            bottom: 10%;
+            margin: 0;
+            width: 90%;    
+            color: white;
+            font-weight: bold;
+            z-index: 2;
+            pointer-events: none;
+            text-align: center;
+        }
+        .coverImg p{
+            position: absolute;
+            margin: 0;
+            left: 5%;
+            bottom: 1%;
+            width: 90%;
+            color: white;
+            z-index: 2;
+            pointer-events: none;
+            text-align: center;
+        }

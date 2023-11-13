@@ -1,0 +1,191 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+}
+
+/* carousel */
+
+#carouselExampleCaptions,
+.carousel-inner, 
+.carousel-item {
+    box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.carousel-inner::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #F2F2F2, #F2F2F2, #F2F2F2, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    height: 450px;
+}
+
+#eventBadge {
+    top: 5%;
+    left: 4%;
+    position:absolute;
+    pointer-events: none;
+    z-index: 1;
+    width: 40%;
+    height: 90%;
+}
+
+#eventInfo {
+    position: relative;
+    top:25%;        
+    pointer-events: none;   
+}
+
+#eventInfo h1 {
+    font-weight: bold;
+}
+
+/* novel */
+
+#moreBtn {
+    color: #34AFBC;
+    border-color:#34AFBC;    
+}
+#moreBtn:hover {
+    color: white;
+    background-color: #34AFBC;    
+}
+
+#mainNovels .col {
+    margin: 0px;
+    padding: 0px;    
+    display: flex;  
+    justify-content: center; 
+    align-items: center;
+}
+
+#mainNovels .card {            
+    width: 12rem;
+    height: 16rem;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;    
+    box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+}
+
+#mainNovels .card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9));
+    z-index: 1;
+    pointer-events: none;
+}
+
+#mainNovels img {    
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+    transition: opacity .2s ease-out;
+    object-position: center;
+}
+
+
+#mainNovels img:hover {
+    transition: opacity .3s ease-in;
+    opacity: 1;
+}
+
+#mainNovels h3 {
+    font-family: 'Pretendard-Regular';
+    font-weight: bold;    
+}
+
+#mainNovels #ranking {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 2.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+}
+
+#mainNovels #ranking h1 {
+    font-family: 'Pretendard-Regular';
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 92%;
+    left: 0;
+    right: 0;
+}
+
+.large-number {
+    font-size: 2.5em;
+    color: gold;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px black;
+}
+
+.small-number {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#mainNovels h5 {
+    position: absolute;    
+    left: 5%;
+    bottom: 10%;
+    margin: 0;
+    width: 90%;    
+    color: white;
+    font-weight: bold;
+    z-index: 2;
+    pointer-events: none;    
+}
+
+#mainNovels p {
+    position: absolute;
+    margin: 0;
+    left: 5%;
+    bottom: 1%;
+    width: 90%;
+    color: white;
+    z-index: 2;
+    pointer-events: none;
+}
+
+#mainNovels span {
+    top: 5%;
+    left: 5%;
+    pointer-events: none;
+}
+
+#newandup {
+    top: 3%;
+    left: 5%;
+    position:absolute;
+    pointer-events: none;
+}

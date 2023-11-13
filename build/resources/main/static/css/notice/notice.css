@@ -1,0 +1,109 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+    text-decoration: none;
+}
+
+#menu .row {
+    margin:50px 0px 0px 0px;
+    padding: 0px;
+    text-align: center;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 30px;
+    font-size: 25px;
+}
+
+#menu .activeL {
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+}
+
+#menu .row>a {
+    color: black;
+}
+
+#menu .row>a:not(.activeL) {
+    border-bottom: solid 1px black !important;
+    border-top: solid 1px lightgray;
+    border-left: solid 1px lightgray;
+    border-right: solid 1px lightgray;
+}
+
+table {
+    border-top: 2px solid black;
+}
+
+td {
+    color: black;
+}
+
+#listTitle {
+    color: black;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #35afbd;
+    border-color: #35afbd;
+}
+
+.pagination a {
+    color: #35afbd;
+}
+
+#titleBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: solid 1px black;
+    border-bottom: solid 1px lightgray;
+}
+
+#title {
+    margin: 0;
+    display: inline;
+}
+
+#regdate {
+    color: rgb(164, 161, 161);
+    display: inline;
+    vertical-align: middle;
+}
+
+.content {
+    white-space: pre-wrap; 
+    word-wrap: break-word;
+    border-bottom: solid 1px lightgray; 
+}
+
+#btnBox {
+    display: flex;
+    justify-content: center;
+}
+
+#btnBox .col-2 {
+    display: inline-block;
+}
+
+#btnBox .btn-lg {
+    width: 110% !important;
+}
+
+.listBtn {
+    border-color: #34AFBC;
+    color: #34AFBC;
+    background-color: white;
+}
+
+.listBtn:hover {
+    color: white;    
+    background-color: #34AFBC;
+}

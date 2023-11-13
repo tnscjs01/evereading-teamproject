@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+    <link rel="stylesheet" type="text/css" href="/css/novel/novel.css">
+    <script type="text/javascript" th:src="@{/js/novel/fantasy.js}"></script>
+
+    <div id="menu" class="container">
+      <div class="row">
+        <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/fantasy') || 
+                                        (#request.getParameter('category') != null && #strings.contains(#request.getParameter('category'), '판타지')) ? 'activeL' : ''}" th:href="@{/novel/fantasy}">판타지</a>    
+        <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/martialArts') || 
+                                        (#request.getParameter('category') != null && #strings.contains(#request.getParameter('category'), '무협')) ? 'activeL' : ''}" th:href="@{/novel/martialArts}">무협</a>
+        <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/modern') || 
+                                        (#request.getParameter('category') != null && #strings.contains(#request.getParameter('category'), '현대')) ? 'activeL' : ''}" th:href="@{/novel/modern}">현대</a>
+        <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/romance') || 
+                                        (#request.getParameter('category') != null && #strings.contains(#request.getParameter('category'), '로맨스')) ? 'activeL' : ''}" th:href="@{/novel/romance}">로맨스</a>
+        <a class="col" th:classappend="${#strings.contains(#request.getRequestURI(), '/other') || 
+                                        (#request.getParameter('category') != null && #strings.contains(#request.getParameter('category'), '기타')) ? 'activeL' : ''}" th:href="@{/novel/other}">기타</a>
+      </div>
+    </div> 
+
+    <div class="container">
+  
+      <div id="mainNovels" class="container mt-5">
+          
+          <div class="row row-cols-1 row-cols-sm-3 row-cols-md-5 g-10">
+
+              <div class="col mt-3 mb-3" th:each="novelDto, iterStat : ${result.dtoList}">
+
+                <div class="card">
+
+                  <a th:href="@{/episode/list(nno=${novelDto.nno})}">
+                    <img th:src="@{/thumbnail/{thumbnail}(thumbnail=${novelDto.thumbnail})}" alt="thumbnail">
+                  </a>  
+
+                  <div class="card-body">
+
+                    <div class="gap-2 d-block" id="newandup">
+                      <span th:if="${novelDto.regdate.isAfter(isNew)}" class="badge rounded-pill badge-dark bg-primary">NEW</span>
+                      <span th:if="${novelDto.mostRecentReg != null and novelDto.mostRecentReg.isAfter(isUp)}" class="badge rounded-pill badge-dark bg-danger">UP</span>
+                    </div>
+
+                    <h5 class="card-title text-center">
+                      [[${novelDto.title}]]                  
+                    </h5>
+
+                    <p class="card-text text-center" th:text="${novelDto.nickname}"></p> 
+
+                  </div>
+
+                </div>
+
+              </div> 
+
+          </div>
+
+      </div>
+  
+      <form th:action="@{/novel/searchByCategory}" method="get" class="d-flex m-3 justify-content-center">
+        <div class="input-group" style="width: 400px;">
+          <select class="form-select" name="category" style="width: 80px;">
+            <option value="판타지">판타지</option>
+            <option value="무협">무협</option>
+            <option value="현대">현대</option>
+            <option value="로맨스">로맨스</option>
+            <option value="기타" selected>기타</option>
+          </select>
+          <input type="text" class="form-control" placeholder="작품명 또는 작가명을 입력하세요" name="keyword" style="width: 220px;">
+          <button class="btn btn-outline-secondary" type="submit">검색</button>
+        </div>
+      </form> 
+          
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" th:if="${result.prev}">
+          <a class="page-link" th:href="@{/novel/other(page=${result.start - 1}, keyword=${keyword})}" tabindex="-1">Prev</a>
+        </li>
+
+        <li th:class="'page-item ' + ${result.page == page ? 'active' : ''}" th:each="page: ${result.pageList}">
+          <a class="page-link" th:href="@{/novel/other(page=${page}, keyword=${keyword})}" th:text="${page}"></a>
+        </li>
+
+        <li class="page-item" th:if="${result.next}">
+          <a class="page-link" th:href="@{/novel/other(page=${result.end + 1}, keyword=${keyword})}">Next</a>
+        </li>
+
+      </ul>  
+      
+    </div>
+
+    </th:block>
+
+</th:block>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
+    <th:block th:fragment="content">
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/member/personalInfo.css}">
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        <div class="container w-75">
+            <div class="row mx-5 px-5 py-5">
+                <div class="col-3 menu">
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <p>[[${info.nickname}]]님은</p><br>
+                        <p sec:authorize="hasRole('ADMIN')"class="fw-bold">관리자 회원</p>
+                        <p>입니다</p>
+                    </div>
+                </div>
+                <div class="col-9 pt-5 px-5 d-flex info">
+                    <h4 class="w-100 pb-2">회원정보수정</h4>
+                </div>
+
+                <div class="col-3 pt-4 menu">
+                    <p class="on"><i class="fa fa-user-o text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/infoView">
+                            회원정보수정
+                        </a>
+                    </p>
+                    <p><i class="fa fa-lock text-center pt-2 on" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/pwModify">
+                            비밀번호 변경
+                        </a>
+                    </p>
+                    <p><i class="fa fa-sign-out text-center pt-2 ps-1" aria-hidden="true"></i>
+                        <a href="http://localhost:8888/member/signout">
+                            회원탈퇴
+                        </a>
+                    </p>
+                </div>
+                <div class="col-9 px-5 py-4 info" id="modify">
+                    
+                    <input type="hidden" id="social" name="social" th:value="${info.isSocial}">
+
+                    <form name="form" action="/member/personalInfo" method="post" onsubmit="return validateForm();">
+                        <div class="form-group row mb-2">
+                            <label class="col-3">이메일</label>
+                            <input type="text" class="form-control col me-3" name="email" th:value="${info.email}" readonly>
+                        </div>
+             
+                        <div class="form-group row mb-2">
+                            <label class="col-3">닉네임</label>
+                            <input type="text" class="form-control me-2 col " id="nickname" name="nickname" th:value="${info.nickname}">
+                            <button type="button" class="btn col-3 btn-outline-default me-3" id="nicknameCheck">중복확인</button>
+                        </div>
+
+                        <div class="form-group d-flex justify-content-end mt-5">
+                            <button class="btn justify-content-end btn-outline-default me-2 w-50">수정</button>
+                            <button class="btn btn-outline-info justify-content-end w-50" type="reset" >취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        
+        <script>
+
+            const xhttp = new XMLHttpRequest();
+            const nickname = document.getElementById("nickname");
+            const pw = document.getElementById('pw');
+            const pwCheck = document.getElementById('pwCheck');
+            const specialCheck = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+            let nicknameck = null;
+            let nickLength = 0;
+
+            document.getElementById("nicknameCheck").addEventListener('click', () => {
+
+                nicknameck = null;
+
+                for(let i=0; i<nickname.value.length; i++){ //한글은 2, 영문은 1로 치환
+                    nick = nickname.value.charAt(i);
+                    if(escape(nick).length >4){
+                        nickLength += 2;
+                    }else{
+                        nickLength += 1;
+                    }
+                }
+                
+                if(!nickname.value){
+                    alert("닉네임을 입력해주세요")
+                    nickname.focus();
+                    return false;
+                }
+                if(nickname.value.search(/\s/) != -1) {
+                    alert("닉네임은 빈 칸을 포함 할 수 없습니다.");
+                    nickname.focus();
+                    return false;
+                } 
+                if(specialCheck.test(nickname.value)) {
+                    alert("닉네임은 특수문자를 포함 할 수 없습니다.");
+                    nickname.focus();
+                    return false;
+                }
+                if (nickLength<2 || nickLength>20) {
+                    alert("닉네임은 한글 1~10자, 영문 및 숫자 2~20자 입니다.");
+                    nickname.focus();
+                    return false;
+                }
+
+                xhttp.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        let result = xhttp.response;
+                        if(result == 0){
+                            alert("사용가능한 닉네임입니다");
+                            nicknameck = 1;
+                            return 
+                        }
+                        alert("사용중인 닉네임입니다.");
+                        nickname.focus();
+    
+                        console.log(result);
+                    }
+                };
+                xhttp.open("GET","/duplicateCheck/"+nickname.value, true)
+                xhttp.send(); 
+    
+            });
+
+            function validateForm(){
+                
+                if(nicknameck != 1){
+                    alert("닉네임을 확인해주세요")
+                    nickname.focus();
+                    return false
+                }
+            }
+
+        </script>
+    
+    </th:block>
+ 
+</th:block>
