@@ -37,4 +37,6 @@ EVEREADING은 누구나 자유롭게 소설을 연재할 수 있는 사이트를
 클릭시 유튜브 이동
 |[![Video Label](http://img.youtube.com/vi/0Su34mcylNY/0.jpg)](https://youtu.be/0Su34mcylNY)|[![Video Label](http://img.youtube.com/vi/nddusFny8Qs/0.jpg)](https://youtu.be/nddusFny8Qs)|[![Video Label](http://img.youtube.com/vi/Ezl6Jli_qlw/0.jpg)](https://youtu.be/Ezl6Jli_qlw)|[![Video Label](http://img.youtube.com/vi/7N6b1WKFdcY/0.jpg)](https://youtu.be/7N6b1WKFdcY)|
 |:-----------------------------------------------------------------------------------------:|:----:|:----:|:----:|
-|공지사항(유저)|공지사항(관리자)|자주 묻는 질문(유저)|자주 묻는 질문(관리자)
+|공지사항(유저)|공지사항(관리자)|자주 묻는 질문(유저)|자주 묻는 질문(관리자)|
+|[![Video Label](http://img.youtube.com/vi/Eb769kDtcuU/0.jpg)](https://youtu.be/Eb769kDtcuU)||||
+|1:1 문의(유저)|1:1 문의(관리자)|||
