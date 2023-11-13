@@ -34,6 +34,7 @@ EVEREADING은 누구나 자유롭게 소설을 연재할 수 있는 사이트를
 - Spring Security
 
 ### :desktop_computer: 화면구성
-|[![Video Label](http://img.youtube.com/vi/0Su34mcylNY/0.jpg)](https://youtu.be/0Su34mcylNY)|[![Video Label](http://img.youtube.com/vi/nddusFny8Qs/0.jpg)](https://youtu.be/nddusFny8Qs)|[![Video Label](http://img.youtube.com/vi/Ezl6Jli_qlw/0.jpg)](https://youtu.be/Ezl6Jli_qlw)|
-|:-----------------------------------------------------------------------------------------:|:----:|:----:|
-|공지사항(유저 권한 계정)|공지사항(관리자 권한 계정)|자주 묻는 질문(유저 권한 계정)|
+클릭시 유튜브 이동
+|[![Video Label](http://img.youtube.com/vi/0Su34mcylNY/0.jpg)](https://youtu.be/0Su34mcylNY)|[![Video Label](http://img.youtube.com/vi/nddusFny8Qs/0.jpg)](https://youtu.be/nddusFny8Qs)|[![Video Label](http://img.youtube.com/vi/Ezl6Jli_qlw/0.jpg)](https://youtu.be/Ezl6Jli_qlw)|[![Video Label](http://img.youtube.com/vi/7N6b1WKFdcY/0.jpg)](https://youtu.be/7N6b1WKFdcY)|
+|:-----------------------------------------------------------------------------------------:|:----:|:----:|:----:|
+|공지사항(유저 권한 계정)|공지사항(관리자 권한 계정)|자주 묻는 질문(유저 권한 계정)|자주 묻는 질문(관리자 권한 계정)
